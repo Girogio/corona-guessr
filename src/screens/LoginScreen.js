@@ -5,6 +5,8 @@ import {Image, Platform, StatusBar, StyleSheet, Text, TextInput, TouchableOpacit
 import AppLoading from 'expo-app-loading';
 import {useFonts} from "expo-font";
 import textBoxStyles from '../../assets/styles/textBox'
+import {responsiveWidth} from "react-native-responsive-dimensions";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 
 const LoginScreen = ({navigation}) => {
@@ -25,9 +27,15 @@ const LoginScreen = ({navigation}) => {
             <View style={styles.container}>
                 <StatusBar style="light"/>
                 <View style={styles.headerContainer}>
-                    <View syle={styles.headerTitleContainer}>
-                        <Text style={styles.titleText}>Welcome.</Text>
-                        <Text style={styles.subTitle}>Hello there, sign in to continue!</Text>
+                    <View>
+                        <View style={styles.headerTitleContainer}>
+                            <TouchableOpacity onPress={() => navigation.pop(1)}>
+                                <Icon name='chevron-back-outline' size={20} color={'white'}
+                                      style={{marginLeft: -40, paddingRight: 30}}/>
+                            </TouchableOpacity>
+                            <Text style={styles.titleText}>Welcome.</Text>
+                        </View>
+                        <Text style={styles.subTitle}>Hello there, sign up to continue!</Text>
                     </View>
                     <Image source={require('../../assets/images/logo.png')} size={20} style={styles.logo}/>
                 </View>
@@ -58,7 +66,7 @@ const LoginScreen = ({navigation}) => {
                     height={51}
                     width={310}
                     radius={8}
-                    onPressAction={() => navigation.navigate('Register')}
+                    onPressAction={() => alert('login')}
                 />
                 <Text style={styles.forgotPasswordText} onPress={() => alert('Forgot password?')}>Forgot your
                     password?</Text>
@@ -100,10 +108,6 @@ const LoginScreen = ({navigation}) => {
 }
 export default LoginScreen;
 const styles = StyleSheet.create({
-    headerButtonContainer: {
-        marginBottom: 20,
-        justifyContent: 'flex-start'
-    },
     container: {
         flex: 1,
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
@@ -111,11 +115,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     headerContainer: {
-        paddingTop: 20,
         marginLeft: 25,
         flexDirection: 'row'
     },
-    headerTitleContainer: {},
+    headerTitleContainer: {
+        flexDirection: 'row',
+        alignSelf: 'flex-start',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
     titleText: {
         fontSize: 36,
         marginLeft: -10,

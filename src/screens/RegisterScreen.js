@@ -1,21 +1,43 @@
 import React, {useState} from "react";
 import GradientButton from "react-native-gradient-buttons";
 import Icon from "react-native-vector-icons/Ionicons";
-import {Image, Platform, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableWithoutFeedback,
+    Keyboard,
+    TouchableOpacity,
+    View
+} from "react-native";
 import AppLoading from 'expo-app-loading';
 import {useFonts} from "expo-font";
 import textBoxStyles from '../../assets/styles/textBox'
+import {responsiveWidth} from "react-native-responsive-dimensions";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-export default function RegisterScreen() {
+export default function RegisterScreen({navigation}) {
+    const [fullNameFocus, setFullNameFocusState] = useState(false);
+    const fullNameFocusStyle = fullNameFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
 
-    const [nameFocus, setNameFocus] = useState(false);
-    const nameFocusStyle = nameFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
+    const [emailFocus, setEmailFocus] = useState(false);
+    const emailFocusStyle = emailFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
 
+    const [passFocus, setPassFocus] = useState(false);
+    const passFocusStyle = passFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
+
+    const [repeatPassFocus, setRepeatPassFocus] = useState(false);
+    const repeatPassFocusStyle = repeatPassFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
 
     let [fontsLoaded] = useFonts({
         'ProximaNova-Bold': require('../../assets/fonts/ProximaNova-Bold.ttf'),
         'ProximaNova-Regular': require('../../assets/fonts/ProximaNova-Regular.ttf'),
     });
+
     if (!fontsLoaded) {
         return <AppLoading/>;
     } else {
@@ -23,25 +45,102 @@ export default function RegisterScreen() {
             <View style={styles.container}>
                 <StatusBar style="light"/>
                 <View style={styles.headerContainer}>
-                    <View syle={styles.headerTitleContainer}>
-                        <Text style={styles.titleText}>Welcome.</Text>
-                        <Text style={styles.subTitle}>Hello there, sign in to continue!</Text>
+                    <View>
+                        <View style={styles.headerTitleContainer}>
+                            <TouchableOpacity onPress={() => navigation.pop(1)}>
+                                <Icon name='chevron-back-outline' size={20} color={'white'}
+                                          style={{marginLeft: -40, paddingRight: 30}}/>
+                            </TouchableOpacity>
+                            <Text style={styles.titleText}>Welcome.</Text>
+                        </View>
+                        <Text style={styles.subTitle}>Hello there, sign up to continue!</Text>
                     </View>
-                    <Image source={require('../../assets/images/logo.png')} size={90}/>
+                    <Image source={require('../../assets/images/logo.png')} size={20} style={styles.logo}/>
                 </View>
                 <TextInput
-                    onFocus={() => setNameFocus(true)}
-                    onBlur={() => setNameFocus(false)}
-                    style={[styles.fullNameTextInput, nameFocusStyle]}
+                    onFocus={() => setFullNameFocusState(true)}
+                    onBlur={() => setFullNameFocusState(false)}
+                    style={[styles.fullNameTextInput, fullNameFocusStyle]}
                     placeholder={'Full name'}
                     placeholderTextColor={'gray'}
-                    autoCompleteType={'email'}
+                    blurOnSubmit={false}
                 />
+                <TextInput
+                    onFocus={() => setEmailFocus(true)}
+                    onBlur={() => setEmailFocus(false)}
+                    style={[styles.emailTextInput, emailFocusStyle]}
+                    placeholder={'Email'}
+                    placeholderTextColor={'gray'}
+                    keyboardType={'email-address'}
+                />
+                <TextInput
+                    onFocus={() => setPassFocus(true)}
+                    onBlur={() => setPassFocus(false)}
+                    style={[styles.passwordTextInput, passFocusStyle]}
+                    placeholder={'Password'}
+                    placeholderTextColor={'gray'}
+                    secureTextEntry={true}
+                />
+                <TextInput
+                    onFocus={() => setRepeatPassFocus(true)}
+                    onBlur={() => setRepeatPassFocus(false)}
+                    style={[styles.repeatPassTextInput, repeatPassFocusStyle]}
+                    placeholder={'Repeat password'}
+                    placeholderTextColor={'gray'}
+                    secureTextEntry={true}
+                />
+                <GradientButton
+                    style={{marginVertical: 8, marginTop: 37, fontFamily: 'ProximaNova-Bold'}}
+                    text="REGISTER"
+                    textStyle={{fontSize: 15, lineHeight: 18}}
+                    gradientBegin="#01B6FC"
+                    gradientEnd='#26E3F6'
+                    gradientDirection='vertical'
+                    impact
+                    height={51}
+                    width={310}
+                    radius={8}
+                    onPressAction={() => navigation.navigate('Register')}
+                />
+                <Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('Login')}>Already have an
+                    account?</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center', paddingTop: 20,}}>
+                    <View style={{flex: 1, height: 1, backgroundColor: 'white'}}/>
+                    <View>
+                        <Text style={styles.orText}>OR</Text>
+                    </View>
+                    <View style={{flex: 1, height: 1, backgroundColor: 'white'}}/>
+                </View>
+                <View style={styles.socialLoginContainer}>
+                    <TouchableOpacity onPress={() => alert('Google!')}>
+                        <View style={styles.googleButton} onPress={() => alert('Google!')}>
+                            <Icon name="logo-google" size={17} color="white"/>
+                            <Text style={{
+                                paddingLeft: 10,
+                                fontSize: 14,
+                                color: 'white',
+                                fontFamily: 'ProximaNova-Regular'
+                            }}>Google</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => alert('Facebook!')}>
+                        <View style={styles.facebookButton}>
+                            <Icon name="logo-facebook" size={17} style={{paddingLeft: 20}} color="white"/>
+                            <Text style={{
+                                paddingLeft: 7,
+                                paddingRight: 16,
+                                fontSize: 14,
+                                fontFamily: 'ProximaNova-Regular',
+                                color: 'white'
+                            }}>Facebook</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+
             </View>
         );
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -51,11 +150,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     headerContainer: {
-        paddingTop: 20,
         marginLeft: 25,
         flexDirection: 'row'
     },
-    headerTitleContainer: {},
+    headerTitleContainer: {
+        flexDirection: 'row',
+        alignSelf: 'flex-start',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
     titleText: {
         fontSize: 36,
         marginLeft: -10,
@@ -68,12 +171,13 @@ const styles = StyleSheet.create({
         color: 'gray',
     },
     logo: {
-        width: 99,
+        width: 100,
         marginLeft: 0,
-        height: 75,
-        marginBottom: 1
+        height: 100,
+        marginBottom: 10
     },
     fullNameTextInput: {
+        borderColor: '#2F80ED',
         borderRadius: 8,
         backgroundColor: '#1f1f1f',
         height: 48,
@@ -81,7 +185,20 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         fontFamily: 'ProximaNova-Bold',
         color: '#fff',
-        marginTop: 43,
+        marginTop: 17,
+        paddingRight: 10,
+        paddingLeft: 17
+    },
+    emailTextInput: {
+        borderColor: '#2F80ED',
+        borderRadius: 8,
+        backgroundColor: '#1f1f1f',
+        height: 48,
+        width: 310,
+        borderWidth: 2,
+        fontFamily: 'ProximaNova-Bold',
+        color: '#fff',
+        marginTop: 17,
         paddingRight: 10,
         paddingLeft: 17
     },
@@ -98,4 +215,57 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         paddingLeft: 17
     },
+    repeatPassTextInput: {
+        borderColor: '#2F80ED',
+        borderRadius: 8,
+        backgroundColor: '#1f1f1f',
+        height: 48,
+        width: 310,
+        borderWidth: 2,
+        fontFamily: 'ProximaNova-Bold',
+        color: '#fff',
+        marginTop: 17,
+        paddingRight: 10,
+        paddingLeft: 17
+    },
+    forgotPasswordText: {
+        color: '#01B3FE',
+        paddingTop: 20,
+        fontFamily: 'ProximaNova-Bold'
+    },
+    orContainer: {
+        flexDirection: 'row'
+    },
+    orText: {
+        width: 50,
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 20,
+        fontFamily: 'ProximaNova-Bold',
+    },
+    socialLoginContainer: {
+        flexDirection: 'row',
+        marginTop: 20,
+        color: 'white',
+        justifyContent: 'space-between'
+    },
+    googleButton: {
+        width: 113,
+        height: 42,
+        borderRadius: 10,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#de5246'
+    },
+    facebookButton: {
+        width: 113,
+        height: 42,
+        marginLeft: 21,
+        borderRadius: 10,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#3B5998'
+    }
 });
