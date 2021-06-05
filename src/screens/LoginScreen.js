@@ -100,6 +100,10 @@ const LoginScreen = ({navigation}) => {
 }
 export default LoginScreen;
 const styles = StyleSheet.create({
+    headerButtonContainer: {
+        marginBottom: 20,
+        justifyContent: 'flex-start'
+    },
     container: {
         flex: 1,
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
@@ -124,9 +128,9 @@ const styles = StyleSheet.create({
         color: 'gray',
     },
     logo: {
-        width: 99,
+        width: 100,
         marginLeft: 0,
-        height: 75,
+        height: 100,
         marginBottom: 10
     },
     emailTextInput: {
