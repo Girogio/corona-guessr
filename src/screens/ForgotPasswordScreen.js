@@ -22,55 +22,47 @@ const ForgotPasswordScreen = ({navigation}) => {
     const [emailFocus, setEmailFocus] = useState(false);
     const emailFocusStyle = emailFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
 
-    let [fontsLoaded] = useFonts({
-        'ProximaNova-Bold': require('../../assets/fonts/ProximaNova-Bold.ttf'),
-        'ProximaNova-Regular': require('../../assets/fonts/ProximaNova-Regular.ttf'),
-    });
-    if (!fontsLoaded) {
-        return <AppLoading/>;
-    } else {
-        return (
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={styles.container}>
-                    <StatusBar style="light"/>
-                    <View style={{flexDirection: "row", alignItems: "center"}}>
-                        <View>
-                            <TouchableOpacity onPress={() => navigation.pop(1)}>
-                                <Icon name={'ios-chevron-back'} size={30} color={'white'} style={{paddingLeft: 35}}/>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <View style={{alignItems: 'center'}}>
-                        <Image style={{width: 218, height: 143, marginTop: 19}}
-                               source={require('../../assets/images/missingpass.png')}/>
-                        <Text style={styles.titleText}>Forgot Password?</Text>
-                        <Text style={styles.subTitle}>Enter your email address to retrieve {'\n'} your password.</Text>
-                        <TextInput
-                            onFocus={() => setEmailFocus(true)}
-                            onBlur={() => setEmailFocus(false)}
-                            style={[styles.emailTextInput, emailFocusStyle]}
-                            placeholder={'Email'}
-                            placeholderTextColor={'gray'}
-                            keyboardType={'email-address'}
-                        />
-                        <GradientButton
-                            style={{marginVertical: 8, marginTop: 37, fontFamily: 'ProximaNova-Bold'}}
-                            text="RESET PASSWORD"
-                            textStyle={{fontSize: 15, fontFamily: 'ProximaNova-Bold'}}
-                            gradientBegin="#01B6FC"
-                            gradientEnd='#26E3F6'
-                            gradientDirection='vertical'
-                            impact
-                            height={51}
-                            width={310}
-                            radius={8}
-                            onPressAction={() => alert('login')}
-                        />
+    return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.container}>
+                <StatusBar style="light"/>
+                <View style={{flexDirection: "row", alignItems: "center"}}>
+                    <View>
+                        <TouchableOpacity onPress={() => navigation.pop(1)}>
+                            <Icon name={'ios-chevron-back'} size={30} color={'white'} style={{paddingLeft: 35}}/>
+                        </TouchableOpacity>
                     </View>
                 </View>
-            </TouchableWithoutFeedback>
-        )
-    }
+                <View style={{alignItems: 'center'}}>
+                    <Image style={{width: 218, height: 143, marginTop: 19}}
+                           source={require('../../assets/images/missingpass.png')}/>
+                    <Text style={styles.titleText}>Forgot Password?</Text>
+                    <Text style={styles.subTitle}>Enter your email address to retrieve {'\n'} your password.</Text>
+                    <TextInput
+                        onFocus={() => setEmailFocus(true)}
+                        onBlur={() => setEmailFocus(false)}
+                        style={[styles.emailTextInput, emailFocusStyle]}
+                        placeholder={'Email'}
+                        placeholderTextColor={'gray'}
+                        keyboardType={'email-address'}
+                    />
+                    <GradientButton
+                        style={{marginVertical: 8, marginTop: 37, fontFamily: 'ProximaNova-Bold'}}
+                        text="RESET PASSWORD"
+                        textStyle={{fontSize: 15, fontFamily: 'ProximaNova-Bold'}}
+                        gradientBegin="#01B6FC"
+                        gradientEnd='#26E3F6'
+                        gradientDirection='vertical'
+                        impact
+                        height={51}
+                        width={310}
+                        radius={8}
+                        onPressAction={() => alert('login')}
+                    />
+                </View>
+            </View>
+        </TouchableWithoutFeedback>
+    )
 }
 const styles = StyleSheet.create({
     container: {

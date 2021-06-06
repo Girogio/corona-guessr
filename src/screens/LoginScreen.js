@@ -26,15 +26,8 @@ const LoginScreen = ({navigation}) => {
     const emailFocusStyle = emailFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
     const passFocusStyle = passFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
 
-    let [fontsLoaded] = useFonts({
-        'ProximaNova-Bold': require('../../assets/fonts/ProximaNova-Bold.ttf'),
-        'ProximaNova-Regular': require('../../assets/fonts/ProximaNova-Regular.ttf'),
-    });
-    if (!fontsLoaded) {
-        return <AppLoading/>;
-    } else {
-        return (
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
             <View style={styles.container}>
                 <StatusBar style="light"/>
@@ -53,7 +46,7 @@ const LoginScreen = ({navigation}) => {
                     <Image source={require('../../assets/images/logo.png')} style={styles.logo}/>
                 </View>
 
-                <View style={{alignItems: 'center',paddingTop: 115}}>
+                <View style={{alignItems: 'center', paddingTop: 115}}>
                     <TextInput
                         onFocus={() => setEmailFocus(true)}
                         onBlur={() => setEmailFocus(false)}
@@ -83,7 +76,8 @@ const LoginScreen = ({navigation}) => {
                         radius={8}
                         onPressAction={() => alert('login')}
                     />
-                    <Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('ForgotPass')}>Forgot your
+                    <Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('ForgotPass')}>Forgot
+                        your
                         password?
                     </Text>
                     <View style={{flexDirection: 'row', alignItems: 'center', paddingTop: 37,}}>
@@ -123,9 +117,8 @@ const LoginScreen = ({navigation}) => {
                     </View>
                 </View>
             </View>
-            </TouchableWithoutFeedback>
-        );
-    }
+        </TouchableWithoutFeedback>
+    );
 }
 export default LoginScreen;
 
