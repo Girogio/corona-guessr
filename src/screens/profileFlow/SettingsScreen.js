@@ -6,6 +6,13 @@ import Icon from "react-native-vector-icons/Ionicons";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import {Header} from "react-native-elements";
 import SwitchToggle from "react-native-switch-toggle";
+import firebase from "firebase/app";
+import "firebase/auth"
+
+
+function logOut() {
+    firebase.auth().signOut().then(console.log('Signed Out'));
+}
 
 export default function SettingsScreen({navigation}) {
     const [on, isON] = useState(false)
@@ -92,10 +99,10 @@ export default function SettingsScreen({navigation}) {
                 </View>
 
                 <View style={styles.entrySubtitleContainer}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={logOut}>
                         <Text style={[styles.entrySubtitleText, {color: '#FF4b3a'}]}>Sign out</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={logOut}>
                         <MaterialIcon color={'#FF4b3a'} name={'chevron-right'} size={25}/>
                     </TouchableOpacity>
                 </View>

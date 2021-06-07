@@ -1,9 +1,11 @@
 import React from "react";
-import {Image, View} from "react-native";
+import {Image, StatusBar, View} from "react-native";
 
 export default function MySplashScreen() {
     return (
         <View style={{backgroundColor: '#0c0c0c', flex: 1}}>
+            <StatusBar style="light"/>
+
             <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
                 <Image source={require('../../assets/images/name-logo.png')}
                        style={{height: 71, width: 217, marginTop: 30}}/>
@@ -11,7 +13,6 @@ export default function MySplashScreen() {
 
             <Image source={require('../../assets/images/devlabel.png')}
                    style={{height: 37, width: 96, alignSelf: 'center', marginBottom: 80}}/>
-
         </View>
 
     )

@@ -13,11 +13,29 @@ import {
     TouchableWithoutFeedback,
     View
 } from "react-native";
-import AppLoading from 'expo-app-loading';
-import {useFonts} from "expo-font";
 import textBoxStyles from '../../../assets/styles/MyStyles'
-import Ionicons from "react-native-vector-icons/Ionicons";
+import firebase from "firebase/app";
+import "firebase/auth"
 
+function handleLogin() {
+
+    firebase.auth()
+        .signInWithEmailAndPassword( 'jane.doe@example.com', 'SuperSecretPassword!')
+        .then(() => {
+            console.log('User account created & signed in!');
+        })
+        .catch(error => {
+            if (error.code === 'auth/email-already-in-use') {
+                console.log('That email address is already in use!');
+            }
+
+            if (error.code === 'auth/invalid-email') {
+                console.log('That email address is invalid!');
+            }
+
+            console.error(error);
+        });
+}
 
 const LoginScreen = ({navigation}) => {
     const [emailFocus, setEmailFocus] = useState(false);
@@ -25,6 +43,7 @@ const LoginScreen = ({navigation}) => {
 
     const emailFocusStyle = emailFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
     const passFocusStyle = passFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
+
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -74,7 +93,7 @@ const LoginScreen = ({navigation}) => {
                         height={51}
                         width={310}
                         radius={8}
-                        onPressAction={() => alert('login')}
+                        onPressAction={handleLogin}
                     />
                     <Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('ForgotPass')}>Forgot
                         your
