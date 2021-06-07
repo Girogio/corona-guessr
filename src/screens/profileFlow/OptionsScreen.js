@@ -14,9 +14,9 @@ function logOut() {
     firebase.auth().signOut().then(console.log('Signed Out'));
 }
 
-export default function SettingsScreen({navigation}) {
+export default function OptionsScreen({navigation}) {
+    const userData = firebase.auth().currentUser.providerData[0];
     const [on, isON] = useState(false)
-
 
     return (
         <View style={MyStyles.container}>
@@ -35,9 +35,10 @@ export default function SettingsScreen({navigation}) {
                 {/*Profile stuff*/}
                 <View style={{flexDirection: 'row', marginTop: 19, alignItems: 'center'}}>
                     <Image style={{borderRadius: 100, height: 38, width: 38}}
-                           source={require('../../../assets/images/justin.jpg')}/>
-                    <Text style={{fontFamily: 'ProximaNova-Bold', fontSize: 18, marginLeft: 16, color: 'white'}}>Justin
-                        Byrne</Text>
+                           source={{uri: (userData.photoURL === null ? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' : userData.photoURL)}}/>
+                    <Text style={{fontFamily: 'ProximaNova-Bold', fontSize: 18, marginLeft: 16, color: 'white'}}>
+                        {userData.displayName === null ? userData.email : userData.displayName}
+                    </Text>
                 </View>
 
                 {/*General section*/}
@@ -63,7 +64,7 @@ export default function SettingsScreen({navigation}) {
                 {/*Account section*/}
                 <Text style={[styles.entryTitle, {marginTop: 26}]}>Account</Text>
                 <View style={styles.entrySubtitleContainer}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('ResetPass')}>
                         <Text style={styles.entrySubtitleText}>Change password</Text>
                     </TouchableOpacity>
                     <TouchableOpacity>

@@ -17,18 +17,20 @@ import textBoxStyles from '../../../assets/styles/MyStyles'
 import firebase from "firebase/app";
 import "firebase/auth"
 
-function handleLogin() {
+function handleLogin(email, pass) {
 
     firebase.auth()
-        .signInWithEmailAndPassword( 'jane.doe@example.com', 'SuperSecretPassword!')
+        .signInWithEmailAndPassword(
+            email,
+            pass
+        )
         .then(() => {
-            console.log('User account created & signed in!');
+            console.log('Signed in!');
         })
         .catch(error => {
             if (error.code === 'auth/email-already-in-use') {
                 console.log('That email address is already in use!');
             }
-
             if (error.code === 'auth/invalid-email') {
                 console.log('That email address is invalid!');
             }
@@ -40,6 +42,9 @@ function handleLogin() {
 const LoginScreen = ({navigation}) => {
     const [emailFocus, setEmailFocus] = useState(false);
     const [passFocus, setPassFocus] = useState(false);
+    const [email, setEmail] = useState('');
+    const [pass, setPass] = useState('');
+
 
     const emailFocusStyle = emailFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
     const passFocusStyle = passFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
@@ -71,6 +76,7 @@ const LoginScreen = ({navigation}) => {
                         onBlur={() => setEmailFocus(false)}
                         style={[styles.emailTextInput, emailFocusStyle]}
                         placeholder={'Email'}
+                        onChangeText={(text) => setEmail(text)}
                         placeholderTextColor={'gray'}
                         keyboardType="email-address"
                     />
@@ -79,6 +85,7 @@ const LoginScreen = ({navigation}) => {
                         onBlur={() => setPassFocus(false)}
                         style={[styles.passwordTextInput, passFocusStyle]}
                         placeholder={'Password'}
+                        onChangeText={(text) => setPass(text)}
                         placeholderTextColor={'gray'}
                         secureTextEntry={true}
                     />
@@ -93,7 +100,7 @@ const LoginScreen = ({navigation}) => {
                         height={51}
                         width={310}
                         radius={8}
-                        onPressAction={handleLogin}
+                        onPressAction={() => handleLogin(email, pass)}
                     />
                     <Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('ForgotPass')}>Forgot
                         your

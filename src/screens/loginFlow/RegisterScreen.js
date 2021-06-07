@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import GradientButton from "react-native-gradient-buttons";
 import Icon from "react-native-vector-icons/Ionicons";
 import {
@@ -14,11 +14,25 @@ import {
     TouchableOpacity,
     View
 } from "react-native";
-import AppLoading from 'expo-app-loading';
-import {useFonts} from "expo-font";
+
+
 import textBoxStyles from '../../../assets/styles/MyStyles'
-import {responsiveWidth} from "react-native-responsive-dimensions";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import firebase from "firebase/app";
+import 'firebase/auth'
+import 'firebase/database'
+
+export const addProfile = (name, email, password) => new Promise((resolve, reject) => {
+    let d = new Date();
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((res) => {
+            firebase.database().ref('/users/' + res.user.uid).set({
+                date_created: d.getTime(),
+                displayName: name,
+                email: email,
+            })
+        })
+
+});
 
 export default function RegisterScreen({navigation}) {
     const [fullNameFocus, setFullNameFocusState] = useState(false);
@@ -33,10 +47,11 @@ export default function RegisterScreen({navigation}) {
     const [repeatPassFocus, setRepeatPassFocus] = useState(false);
     const repeatPassFocusStyle = repeatPassFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
 
-    let [fontsLoaded] = useFonts({
-        'ProximaNova-Bold': require('../../../assets/fonts/ProximaNova-Bold.ttf'),
-        'ProximaNova-Regular': require('../../../assets/fonts/ProximaNova-Regular.ttf'),
-    });
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
+
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -67,6 +82,7 @@ export default function RegisterScreen({navigation}) {
                         onBlur={() => setFullNameFocusState(false)}
                         style={[styles.fullNameTextInput, fullNameFocusStyle]}
                         placeholder={'Full name'}
+                        onChangeText={(name) => setName(name)}
                         placeholderTextColor={'gray'}
                     />
                     <TextInput
@@ -74,6 +90,7 @@ export default function RegisterScreen({navigation}) {
                         onBlur={() => setEmailFocus(false)}
                         style={[styles.emailTextInput, emailFocusStyle]}
                         placeholder={'Email'}
+                        onChangeText={(email) => setEmail(email)}
                         placeholderTextColor={'gray'}
                         keyboardType={'email-address'}
                     />
@@ -82,6 +99,7 @@ export default function RegisterScreen({navigation}) {
                         onBlur={() => setPassFocus(false)}
                         style={[styles.passwordTextInput, passFocusStyle]}
                         placeholder={'Password'}
+                        onChangeText={(password) => setPassword(password)}
                         placeholderTextColor={'gray'}
                         secureTextEntry={true}
                     />
@@ -90,6 +108,7 @@ export default function RegisterScreen({navigation}) {
                         onBlur={() => setRepeatPassFocus(false)}
                         style={[styles.repeatPassTextInput, repeatPassFocusStyle]}
                         placeholder={'Repeat password'}
+                        onChangeText={(repeatPassword) => setRepeatPassword(repeatPassword)}
                         placeholderTextColor={'gray'}
                         secureTextEntry={true}
                     />
@@ -104,7 +123,7 @@ export default function RegisterScreen({navigation}) {
                         height={51}
                         width={310}
                         radius={8}
-                        onPressAction={() => navigation.navigate('Register')}
+                        onPressAction={() => addProfile(name, email, password)}
                     />
                     <Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('Login')}>Already have an
                         account?</Text>

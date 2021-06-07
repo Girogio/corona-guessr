@@ -32,6 +32,7 @@ export default function DashboardScreen({navigation}) {
             <Image style={styles.maltaImage} source={require('../../../assets/images/MALTA.png')}/>
             <ScrollView>
                 <View style={styles.buttonRows}>
+                    {/*Button 1*/}
                     <TouchableNativeFeedback onPress={() => navigation.navigate('SubmitPrediction')}>
                         <View style={styles.leftButtonContainer}>
                             <Text style={styles.buttonTitleText}>Your{'\n'}Prediction</Text>
@@ -43,7 +44,8 @@ export default function DashboardScreen({navigation}) {
                             <Text style={styles.buttonStatusText}>Submit your{'\n'}prediction.</Text>
                         </View>
                     </TouchableNativeFeedback>
-                    <TouchableNativeFeedback>
+                    {/*Button 2*/}
+                    <TouchableNativeFeedback onPress={() => navigation.navigate('TodaysPrediction')}>
                         <View style={styles.rightButtonContainer}>
                             <View>
                                 <Text style={styles.buttonTitleText}>Today's{'\n'}Predictions</Text>
@@ -65,8 +67,6 @@ export default function DashboardScreen({navigation}) {
 
 const styles = StyleSheet.create({
     container: {
-
-
         backgroundColor: '#0c0c0c',
         alignItems: 'center'
     },
@@ -97,13 +97,17 @@ const styles = StyleSheet.create({
     leftButtonContainer: {
         width: 160,
         height: 170,
+        paddingLeft: 12,
+        paddingRight: 12,
         backgroundColor: '#252525',
         borderRadius: 24
     },
     rightButtonContainer: {
         width: 160,
         height: 170,
+        paddingLeft: 12,
         marginLeft: 15,
+        paddingRight: 12,
         backgroundColor: '#252525',
         borderRadius: 24
     },
@@ -111,28 +115,30 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-SemiBold',
         color: 'white',
         paddingTop: 16,
-        paddingLeft: 16,
+        marginLeft: 6,
     },
     buttonStatusContainer: {
         alignItems: 'center',
         alignContent: 'center',
         flexDirection: 'row',
+        marginLeft: 6,
         marginTop: 4.3,
-        paddingLeft: 16,
     },
     buttonStatusText: {
-        marginLeft: 10,
         fontSize: 12,
         fontFamily: 'Poppins-SemiBold',
         color: 'white',
-        opacity: 0.75
+        opacity: 0.75,
+        marginLeft: 6,
+
     },
     divider: {
         alignSelf: 'center',
         backgroundColor: 'white',
         opacity: 0.5,
         height: 1.5,
-        width: 137,
+        marginBottom: 11,
+        width: '100%',
         marginTop: 11
     }
 

@@ -15,8 +15,12 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import textBoxStyles from "../../../assets/styles/MyStyles";
 import GradientButton from "react-native-gradient-buttons";
+import {Header} from "react-native-elements";
+import MyStyles from "../../../assets/styles/MyStyles";
+import Colors from "../../../assets/colors/Colors";
+import "firebase/auth"
 
-const ForgotPasswordScreen = ({navigation}) => {
+const ResetPasswordScreen = ({navigation}) => {
     const [emailFocus, setEmailFocus] = useState(false);
     const emailFocusStyle = emailFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
 
@@ -24,18 +28,20 @@ const ForgotPasswordScreen = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
                 <StatusBar style="light"/>
-                <View style={{flexDirection: "row", alignItems: "center"}}>
-                    <View>
-                        <TouchableOpacity onPress={() => navigation.pop(1)}>
-                            <Icon name={'ios-chevron-back'} size={30} color={'white'} style={{paddingLeft: 35}}/>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                <Header backgroundColor={Colors.darkBackground}
+                        leftComponent={
+                            <TouchableOpacity onPress={() => navigation.pop(1)}>
+                                <Icon name={'ios-chevron-back'} size={30} color={'white'} style={{paddingLeft: 35}}/>
+                            </TouchableOpacity>
+                        }
+                        leftContainerStyle={MyStyles.mainHeaderLeftContainer}
+                        containerStyle={MyStyles.mainHeaderContainer}
+                />
                 <View style={{alignItems: 'center'}}>
                     <Image style={{width: 218, height: 143, marginTop: 19}}
-                           source={require('../../../assets/images/missingpass.png')}/>
-                    <Text style={styles.titleText}>Forgot Password?</Text>
-                    <Text style={styles.subTitle}>Enter your email address to retrieve {'\n'} your password.</Text>
+                           source={require('../../../assets/images/lock.png')}/>
+                    <Text style={styles.titleText}>Change your{'\n'}password.</Text>
+                    <Text style={styles.subTitle}>Enter your email address to reset{'\n'}your password.</Text>
                     <TextInput
                         onFocus={() => setEmailFocus(true)}
                         onBlur={() => setEmailFocus(false)}
@@ -77,6 +83,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         marginTop: 46,
         color: '#fff',
+        textAlign: 'center',
         letterSpacing: 0.18,
         fontFamily: 'ProximaNova-Bold'
     },
@@ -108,4 +115,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default ForgotPasswordScreen;
+export default ResetPasswordScreen;

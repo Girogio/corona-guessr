@@ -35,6 +35,7 @@ const MyStyles = StyleSheet.create({
     },
     mainHeaderText: {
         color: 'white',
+        textAlign: 'center',
         fontFamily: 'ProximaNova-Bold',
         fontSize: 21,
     },

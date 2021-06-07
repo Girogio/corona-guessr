@@ -16,12 +16,11 @@ import DashboardScreen from "./src/screens/homeFlow/DashboardScreen";
 import LeaderboardScreen from "./src/screens/leaderboardFlow/LeaderboardScreen";
 import ProfileScreen from "./src/screens/profileFlow/ProfileScreen";
 import SubmitPredictionScreen from "./src/screens/homeFlow/SubmitPredictionScreen";
-
+import TodaysPredictionScreen from "./src/screens/homeFlow/TodaysPredictionScreen";
 
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {useFonts} from "expo-font";
 import AppLoading from "expo-app-loading";
-import SettingsScreen from "./src/screens/profileFlow/SettingsScreen";
 
 const mainStack = createBottomTabNavigator();
 const loginStack = createStackNavigator();
@@ -32,6 +31,8 @@ const profileStack = createStackNavigator();
 import firebase from 'firebase/app'
 import "firebase/auth";
 import firebaseConfig from "./auth";
+import ResetPasswordScreen from "./src/screens/profileFlow/ResetPasswordScreen";
+import OptionsScreen from "./src/screens/profileFlow/OptionsScreen";
 
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
@@ -78,6 +79,9 @@ function HomeStack() {
             <homeStack.Screen name="SubmitPrediction" component={SubmitPredictionScreen} options={{
                 gestureDirection: 'horizontal', gestureEnabled: true
             }}/>
+            <homeStack.Screen name="TodaysPrediction" component={TodaysPredictionScreen} options={{
+                gestureDirection: 'horizontal', gestureEnabled: true
+            }}/>
         </homeStack.Navigator>
     )
 }
@@ -108,7 +112,10 @@ function ProfileStack() {
             <profileStack.Screen name="Profile" component={ProfileScreen} options={{
                 gestureDirection: 'horizontal', gestureEnabled: true
             }}/>
-            <profileStack.Screen name="Settings" component={SettingsScreen} options={{
+            <profileStack.Screen name="Settings" component={OptionsScreen} options={{
+                gestureDirection: 'vertical', gestureEnabled: true
+            }}/>
+            <profileStack.Screen name="ResetPass" component={ResetPasswordScreen} options={{
                 gestureDirection: 'vertical', gestureEnabled: true
             }}/>
         </profileStack.Navigator>
@@ -153,7 +160,7 @@ function MainStack() {
                                  activeBackgroundColor: '#242632'
                              }}>
             <mainStack.Screen name="Home" component={HomeStack}/>
-            <mainStack.Screen name="Leaderboard" component={LeaderboardScreen}/>
+            <mainStack.Screen name="Leaderboard" component={LeaderboardStack}/>
             <mainStack.Screen name="Profile" component={ProfileStack}/>
         </mainStack.Navigator>
     )
