@@ -8,23 +8,27 @@ import {
 } from '@react-navigation/stack';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import LoginScreen from "./src/screens/LoginScreen";
-import RegisterScreen from "./src/screens/RegisterScreen";
-import ForgotPasswordScreen from "./src/screens/ForgotPasswordScreen";
+import LoginScreen from "./src/screens/loginFlow/LoginScreen";
+import RegisterScreen from "./src/screens/loginFlow/RegisterScreen";
+import ForgotPasswordScreen from "./src/screens/loginFlow/ForgotPasswordScreen";
 import MySplashScreen from "./src/screens/MySplashScreen";
-import DashboardScreen from "./src/screens/DashboardScreen";
-import LeaderboardScreen from "./src/screens/LeaderboardScreen";
-import ProfileScreen from "./src/screens/ProfileScreen";
+import DashboardScreen from "./src/screens/homeFlow/DashboardScreen";
+import LeaderboardScreen from "./src/screens/leaderboardFlow/LeaderboardScreen";
+import ProfileScreen from "./src/screens/profileFlow/ProfileScreen";
+import SubmitPredictionScreen from "./src/screens/homeFlow/SubmitPredictionScreen";
+
+``
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {useFonts} from "expo-font";
 import AppLoading from "expo-app-loading";
+import SettingsScreen from "./src/screens/profileFlow/SettingsScreen";
 
-const loginStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const loginStack = createStackNavigator();
+const homeStack = createStackNavigator();
+const profileStack = createStackNavigator();
 
-
-function loginFlow() {
-
+function LoginStack() {
     return (
         <loginStack.Navigator screenOptions={{
             headerShown: false,
@@ -41,14 +45,48 @@ function loginFlow() {
             <loginStack.Screen name="ForgotPass" component={ForgotPasswordScreen} options={{
                 gestureDirection: 'horizontal', gestureEnabled: true
             }}/>
-        </loginStack.Navigator>)
+        </loginStack.Navigator>
+    )
 }
 
-function mainFlow() {
+function HomeStack() {
+    return (
+        <homeStack.Navigator screenOptions={{
+            headerShown: false,
+            headerStyleInterpolator: HeaderStyleInterpolators.forStatic,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            animationEnabled: true,
+        }}>
+            <loginStack.Screen name="Dashboard" component={DashboardScreen} options={{
+                gestureDirection: 'horizontal', gestureEnabled: true
+            }}/>
+            <loginStack.Screen name="SubmitPrediction" component={SubmitPredictionScreen} options={{
+                gestureDirection: 'horizontal', gestureEnabled: true
+            }}/>
+        </homeStack.Navigator>)
+}
 
+function ProfileStack() {
+    return (
+        <profileStack.Navigator screenOptions={{
+            headerShown: false,
+            headerStyleInterpolator: HeaderStyleInterpolators.forStatic,
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+            animationEnabled: true,
+        }}>
+            <profileStack.Screen name="Profile" component={ProfileScreen} options={{
+                gestureDirection: 'horizontal', gestureEnabled: true
+            }}/>
+            <profileStack.Screen name="Settings" component={SettingsScreen} options={{
+                gestureDirection: 'vertical', gestureEnabled: true
+            }}/>
+        </profileStack.Navigator>
+    )
+}
+
+function MainStack() {
     return (
         <Tab.Navigator screenOptions={({route}) => ({
-
             tabBarIcon: ({focused, color, size}) => {
                 let iconName;
 
@@ -83,14 +121,14 @@ function mainFlow() {
                            inactiveBackgroundColor: '#242632',
                            activeBackgroundColor: '#242632'
                        }}>
-            <Tab.Screen name="Home" component={DashboardScreen}/>
+            <Tab.Screen name="Home" component={HomeStack}/>
             <Tab.Screen name="Leaderboard" component={LeaderboardScreen}/>
-            <Tab.Screen name="Profile" component={ProfileScreen}/>
+            <Tab.Screen name="Profile" component={ProfileStack}/>
         </Tab.Navigator>
     )
 }
 
-const App = () => {
+export default function App() {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
@@ -98,24 +136,25 @@ const App = () => {
             setIsLoading(false)
         }, 3000)
     }, [])
+
     let [fontsLoaded] = useFonts({
         'SFPro-Light': require('./assets/fonts/SFPro-Light.ttf'),
         'ProximaNova-Bold': require('./assets/fonts/ProximaNova-Bold.ttf'),
         'ProximaNova-Regular': require('./assets/fonts/ProximaNova-Regular.ttf'),
+        'ProximaNova-SemiBold': require('./assets/fonts/ProximaNova-SemiBold.otf'),
         'Georgia-Regular': require('./assets/fonts/Georgia-Regular.ttf'),
         'Georgia-Bold': require('./assets/fonts/Georgia-Bold.ttf'),
         'Poppins-SemiBold': require('./assets/fonts/Poppins-SemiBold.ttf'),
         'Poppins-Regular': require('./assets/fonts/Poppins-Regular.ttf')
-
     });
+
     if (!fontsLoaded) {
         return <AppLoading/>;
     } else {
         return (
             <NavigationContainer>
-                {isLoading ? (<MySplashScreen/>) : (mainFlow())}
+                {isLoading ? (<MySplashScreen/>) : (MainStack())}
             </NavigationContainer>
         )
     }
 }
-export default App;

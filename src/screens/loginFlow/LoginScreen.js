@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import AppLoading from 'expo-app-loading';
 import {useFonts} from "expo-font";
-import textBoxStyles from '../../assets/styles/textBox'
+import textBoxStyles from '../../../assets/styles/MyStyles'
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 
@@ -43,7 +43,7 @@ const LoginScreen = ({navigation}) => {
                             </View>
                         </View>
                     </View>
-                    <Image source={require('../../assets/images/logo.png')} style={styles.logo}/>
+                    <Image source={require('../../../assets/images/logo.png')} style={styles.logo}/>
                 </View>
 
                 <View style={{alignItems: 'center', paddingTop: 115}}>

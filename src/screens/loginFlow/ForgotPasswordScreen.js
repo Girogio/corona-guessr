@@ -14,8 +14,7 @@ import {
     View
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import SvgUri from 'react-native-svg-uri';
-import textBoxStyles from "../../assets/styles/textBox";
+import textBoxStyles from "../../../assets/styles/MyStyles";
 import GradientButton from "react-native-gradient-buttons";
 
 const ForgotPasswordScreen = ({navigation}) => {
@@ -35,7 +34,7 @@ const ForgotPasswordScreen = ({navigation}) => {
                 </View>
                 <View style={{alignItems: 'center'}}>
                     <Image style={{width: 218, height: 143, marginTop: 19}}
-                           source={require('../../assets/images/missingpass.png')}/>
+                           source={require('../../../assets/images/missingpass.png')}/>
                     <Text style={styles.titleText}>Forgot Password?</Text>
                     <Text style={styles.subTitle}>Enter your email address to retrieve {'\n'} your password.</Text>
                     <TextInput

@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import AppLoading from 'expo-app-loading';
 import {useFonts} from "expo-font";
-import textBoxStyles from '../../assets/styles/textBox'
+import textBoxStyles from '../../../assets/styles/MyStyles'
 import {responsiveWidth} from "react-native-responsive-dimensions";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -34,8 +34,8 @@ export default function RegisterScreen({navigation}) {
     const repeatPassFocusStyle = repeatPassFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
 
     let [fontsLoaded] = useFonts({
-        'ProximaNova-Bold': require('../../assets/fonts/ProximaNova-Bold.ttf'),
-        'ProximaNova-Regular': require('../../assets/fonts/ProximaNova-Regular.ttf'),
+        'ProximaNova-Bold': require('../../../assets/fonts/ProximaNova-Bold.ttf'),
+        'ProximaNova-Regular': require('../../../assets/fonts/ProximaNova-Regular.ttf'),
     });
 
     return (
@@ -58,7 +58,7 @@ export default function RegisterScreen({navigation}) {
                             </View>
                         </View>
                     </View>
-                    <Image source={require('../../assets/images/logo.png')} style={styles.logo}/>
+                    <Image source={require('../../../assets/images/logo.png')} style={styles.logo}/>
                 </View>
                 <View style={{alignItems: "center", paddingTop: 10}}>
 
