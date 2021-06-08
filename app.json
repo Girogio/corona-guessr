@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "coronaGuessr",
-    "slug": "coronaGuessr",
+    "name": "Guessya",
+    "slug": "Guessya",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -19,7 +19,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.girogio.coronaGuessr"
+      "package": "com.girogio.Guessya"
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     View,
     Text,
@@ -15,11 +15,34 @@ import Icon from "react-native-vector-icons/Ionicons";
 import {Header} from "react-native-elements";
 import MyStyles from "../../../assets/styles/MyStyles";
 import GradientButton from "react-native-gradient-buttons";
-
+import firebase from "firebase/app"
+import 'firebase/auth'
+import 'firebase/database'
 
 export default function SubmitPredictionScreen({navigation}) {
+    const user = firebase.auth().currentUser;
     const [guessFocus, setGuessFocus] = useState(false);
     const guessFocusStyle = guessFocus ? MyStyles.textInputFocus : MyStyles.textInputBlurred;
+
+    const [hasGuessed, setHasGuessed] = useState(false);
+    const [guess, setGuess] = useState('')
+
+    useEffect(() => {
+        firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/hasGuessed')
+            .once('value')
+            .then(snapshot => setGuess(snapshot.val()))
+    }, [setGuess, setHasGuessed])
+
+    function submitGuess() {
+        const now = new Date();
+        if (!hasGuessed) {
+            firebase.database().ref('guesses/' + now.getDate() + '_' + (now.getMonth() + 1) + '_' + now.getFullYear() + '/' + user.uid + '/guess').set(guess).then(r => {
+                setHasGuessed(true)
+                firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/hasGuessed').set(true).then()
+            })
+
+        }
+    }
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -46,6 +69,7 @@ export default function SubmitPredictionScreen({navigation}) {
                     style={[MyStyles.defaultTextInput, guessFocusStyle, styles.guessyaTextInput]}
                     placeholder={'...'}
                     keyboardType={'number-pad'}
+                    onChangeText={(text) => setGuess(text)}
                     placeholderTextColor={'gray'}
                 />
                 <GradientButton
@@ -59,7 +83,7 @@ export default function SubmitPredictionScreen({navigation}) {
                     height={51}
                     width={310}
                     radius={8}
-                    onPressAction={() => alert('login')}
+                    onPressAction={() => submitGuess()}
                 />
             </View>
         </TouchableWithoutFeedback>

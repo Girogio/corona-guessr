@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import MyStyles from "../../../assets/styles/MyStyles";
 import Colors from "../../../assets/colors/Colors";
@@ -15,7 +15,28 @@ function logOut() {
 }
 
 export default function OptionsScreen({navigation}) {
-    const userData = firebase.auth().currentUser.providerData[0];
+    const [userData, setUserData] = useState({
+        date_created: '',
+        displayName: '',
+        email: '',
+        rank: '',
+    });
+
+    useEffect(() => {
+        firebase.database()
+            .ref('users/' + firebase.auth().currentUser.uid)
+            .on('value', snapshot => {
+                const userStuff = {
+                    date_created: snapshot.val().date_created,
+                    displayName: snapshot.val().displayName,
+                    email: snapshot.val().email,
+                    rank: snapshot.val().rank,
+                    achievements: snapshot.val().achievements
+                }
+                setUserData(userStuff)
+            });
+    }, [])
+
     const [on, isON] = useState(false)
 
     return (
@@ -37,7 +58,7 @@ export default function OptionsScreen({navigation}) {
                     <Image style={{borderRadius: 100, height: 38, width: 38}}
                            source={{uri: (userData.photoURL === null ? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' : userData.photoURL)}}/>
                     <Text style={{fontFamily: 'ProximaNova-Bold', fontSize: 18, marginLeft: 16, color: 'white'}}>
-                        {userData.displayName === null ? userData.email : userData.displayName}
+                        {userData.displayName}
                     </Text>
                 </View>
 

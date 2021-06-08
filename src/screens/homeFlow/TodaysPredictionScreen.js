@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {FlatList, Image, StatusBar, Text, TouchableOpacity, View} from "react-native";
 import {Badge, Header, withBadge} from "react-native-elements";
 import Colors from "../../../assets/colors/Colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import MyStyles from "../../../assets/styles/MyStyles";
 import {dailyData} from "../../../assets/data/dailyData";
+import firebase from "firebase";
 
 
 function renderItem({item}) {
@@ -28,7 +29,8 @@ function renderItem({item}) {
                     {item.hasPredicted
                         ? <BadgedIcon type="ionicon"
                                       name={"checkmark-circle"}
-                                      style={{color: 'white', position: 'absolute', bottom: 0, right: -9}} size={20}/> : null}
+                                      style={{color: 'white', position: 'absolute', bottom: 0, right: -9}}
+                                      size={20}/> : null}
                 </View>
 
                 <Text style={{
@@ -64,6 +66,50 @@ function renderItem({item}) {
 }
 
 export default function TodaysPredictionScreen({navigation}) {
+
+    const [allUsers, setAllusers] = useState([])
+    const [allPredictions, setAllPredictions] = useState([])
+    const now = new Date();
+
+
+    useEffect(() => {
+
+
+        firebase.database()
+            .ref('guesses/' + now.getDate() + '_' + (now.getMonth() + 1) + '_' + now.getFullYear())
+            .on('value', snapshot => {
+                const toPredictions = []
+                snapshot.forEach(guess => {
+                    toPredictions.push({
+                        guess: guess.val().guess,
+                        hasGuessed: 2,
+                        uid: guess.key,
+                    })
+                })
+                setAllPredictions(toPredictions)
+
+            });
+
+        firebase.database()
+            .ref('users/')
+            .on('value', snapshot => {
+                const toAllUsers = []
+                snapshot.forEach(user => {
+                    toAllUsers.push({
+                        uid: user.key,
+                        displayName: user.val().displayName,
+                        hasGuessed: user.val().hasGuessed,
+                    })
+                })
+                setAllusers(toAllUsers)
+
+            })
+    }, [])
+
+    function getHasGuessedByUid({uid}) {
+        console.log(allUsers.filter(user => user.uid === '3M3FgI9WNXOvh4lDH9otvsbZWem2'))
+    }
+
     return (
         <View style={MyStyles.container}>
             <StatusBar style="light"/>

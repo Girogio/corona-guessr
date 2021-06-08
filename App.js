@@ -79,7 +79,7 @@ function HomeStack() {
             <homeStack.Screen name="SubmitPrediction" component={SubmitPredictionScreen} options={{
                 gestureDirection: 'horizontal', gestureEnabled: true
             }}/>
-            <homeStack.Screen name="TodaysPrediction" component={TodaysPredictionScreen} options={{
+            <homeStack.Screen name="TodaysPredictions" component={TodaysPredictionScreen} options={{
                 gestureDirection: 'horizontal', gestureEnabled: true
             }}/>
         </homeStack.Navigator>
@@ -172,18 +172,14 @@ export default function App() {
     useEffect(() => {
         setTimeout(() => {
             setIsLoading(false)
-        }, 3000)
+        }, 4000)
     }, [])
 
 
     const [currentUser, setCurrentUser] = React.useState(null)
     firebase.auth().onAuthStateChanged(user => {
         setCurrentUser(user)
-        if (user != null) {
 
-        } else if (user == null) {
-
-        }
     });
 
     let [fontsLoaded] = useFonts({
