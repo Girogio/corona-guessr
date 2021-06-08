@@ -16,6 +16,7 @@ import {
 import textBoxStyles from '../../../assets/styles/MyStyles'
 import firebase from "firebase/app";
 import "firebase/auth"
+import UserInfo from "../../UserInfo";
 
 function handleLogin(email, pass) {
 
@@ -25,7 +26,9 @@ function handleLogin(email, pass) {
             pass
         )
         .then(() => {
-            console.log('Signed in!');
+firebase.auth().currentUser?.updateProfile({
+    displayName: name
+})
         })
         .catch(error => {
             if (error.code === 'auth/email-already-in-use') {

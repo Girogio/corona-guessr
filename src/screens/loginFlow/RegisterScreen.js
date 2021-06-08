@@ -27,11 +27,12 @@ export const addProfile = (name, email, password) => new Promise((resolve, rejec
         .then((res) => {
             firebase.database().ref('/users/' + res.user.uid).set({
                 date_created: d.getTime(),
-                displayName: name,
                 email: email,
             })
-        })
 
+        }).finally(()=> firebase.auth().currentUser?.updateProfile({
+        displayName: name}).then()
+    )
 });
 
 export default function RegisterScreen({navigation}) {

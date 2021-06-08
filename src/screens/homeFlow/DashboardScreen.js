@@ -12,6 +12,8 @@ import {
 import {Header} from 'react-native-elements'
 import Icon from "react-native-vector-icons/Ionicons";
 import Colors from "../../../assets/colors/Colors";
+import firebase from "firebase/app";
+import 'firebase/auth'
 import MyStyles from "../../../assets/styles/MyStyles";
 
 export default function DashboardScreen({navigation}) {
@@ -27,7 +29,7 @@ export default function DashboardScreen({navigation}) {
             />
 
             <Text style={styles.subtitle}>Welcome back,
-                <Text style={styles.nameText}> Justin.</Text>
+                 <Text style={styles.nameText}> {firebase.auth().currentUser.displayName.split(" ")[0]}</Text>.
             </Text>
             <Image style={styles.maltaImage} source={require('../../../assets/images/MALTA.png')}/>
             <ScrollView>

@@ -180,9 +180,9 @@ export default function App() {
     firebase.auth().onAuthStateChanged(user => {
         setCurrentUser(user)
         if (user != null) {
-            console.log('We are authenticated now! - Email', user.email);
+
         } else if (user == null) {
-            console.log("Logged out!");
+
         }
     });
 
