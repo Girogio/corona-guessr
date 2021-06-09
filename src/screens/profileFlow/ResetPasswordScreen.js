@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 
 import {
+    Button,
     Image,
     Keyboard,
     Platform,
@@ -19,10 +20,27 @@ import {Header} from "react-native-elements";
 import MyStyles from "../../../assets/styles/MyStyles";
 import Colors from "../../../assets/colors/Colors";
 import "firebase/auth"
+import firebase from "firebase/app";
+import {FancyAlert} from "react-native-expo-fancy-alerts";
 
 const ResetPasswordScreen = ({navigation}) => {
     const [emailFocus, setEmailFocus] = useState(false);
     const emailFocusStyle = emailFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
+    const [email, setEmail] = useState('');
+    const [visible, setVisible] = React.useState(false);
+    const toggleAlert = React.useCallback(() => {
+        setVisible(!visible);
+    }, [visible]);
+
+    function exitScreen() {
+        toggleAlert()
+        navigation.pop(1)
+    }
+
+
+    function resetPassDialog() {
+        firebase.auth().sendPasswordResetEmail(email).then(r => toggleAlert())
+    }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -48,6 +66,7 @@ const ResetPasswordScreen = ({navigation}) => {
                         style={[styles.emailTextInput, emailFocusStyle]}
                         placeholder={'Email'}
                         placeholderTextColor={'gray'}
+                        onChangeText={(text) => setEmail(text)}
                         keyboardType={'email-address'}
                     />
                     <GradientButton
@@ -61,8 +80,42 @@ const ResetPasswordScreen = ({navigation}) => {
                         height={51}
                         width={310}
                         radius={8}
-                        onPressAction={() => alert('login')}
+                        onPressAction={() => resetPassDialog()}
                     />
+                    <FancyAlert
+                        visible={visible}
+                        onRequestClose={toggleAlert}
+                        icon={<View style={{
+                            flex: 1,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: "#18c028",
+                            borderRadius: 50,
+                            width: '100%',
+                        }}><Icon name={'checkmark-done'} size={25}/></View>}
+                        style={{backgroundColor: 'white'}}
+                    >
+                        <Text style={{marginTop: -16, marginBottom: 32, color: 'black', textAlign: 'center'}}>Check your
+                            inbox for instructions on how to reset your password!</Text>
+                        <TouchableOpacity style={{
+                            borderRadius: 32,
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            paddingVertical: 8,
+                            marginBottom: 10,
+                            alignSelf: 'stretch',
+                            backgroundColor: '#4CB748',
+                            marginTop: 16,
+                            minWidth: '50%',
+                            paddingHorizontal: 16,
+                        }} onPress={() => exitScreen()}>
+                            <Text style={{color: 'white'}}>OK</Text>
+
+                        </TouchableOpacity>
+                    </FancyAlert>
                 </View>
             </View>
         </TouchableWithoutFeedback>

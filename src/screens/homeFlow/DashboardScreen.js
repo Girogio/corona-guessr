@@ -15,13 +15,20 @@ import MaterialCommIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Colors from "../../../assets/colors/Colors";
 import firebase from "firebase/app";
 import 'firebase/auth'
-import {differenceInSeconds} from "date-fns";
+
+const timer = require('react-native-timer');
+
+import {set, intervalToDuration, parseISO} from "date-fns";
 
 import MyStyles from "../../../assets/styles/MyStyles";
 
 export default function DashboardScreen({navigation}) {
     const appState = useRef(AppState.currentState);
-    const [elapsed, setElapsed] = useState(0);
+    const [remaining, setRemaining] = useState({
+        hours: '00',
+        minutes: '00',
+        seconds: '00'
+    });
 
     const [userData, setUserData] = useState({
         date_created: '',
@@ -34,16 +41,10 @@ export default function DashboardScreen({navigation}) {
     useEffect(() => {
         const now = new Date()
 
-        const id = setInterval(() => {
-            setElapsed(elapsed + 1)
-        }, 1000)
-
-        //todo fix real time timer
-
 
         firebase.database()
             .ref('users/' + firebase.auth().currentUser.uid)
-            .on('value', snapshot => {
+            .once('value', snapshot => {
                 const userStuff = {
                     date_created: snapshot.val().date_created,
                     displayName: snapshot.val().displayName,
@@ -57,27 +58,31 @@ export default function DashboardScreen({navigation}) {
 
                 AppState.addEventListener("change", handleAppStateChange);
                 return () => AppState.removeEventListener("change", handleAppStateChange);
-            });
+            }).then({});
 
-    }, [elapsed])
+    }, [remaining, setRemaining])
+
     const handleAppStateChange = async (nextAppState) => {
         if (appState.current.match(/inactive|background/) &&
             nextAppState === "active") {
-            // We just became active again: recalculate elapsed time based
-            // on what we stored in AsyncStorage when we started.
-            const elapsed = await getElapsedTime();
-            // Update the elapsed seconds state
-            setElapsed(elapsed);
+
+            let remainingTime = await getElapsedTime();
+            setRemaining(remainingTime)
+
+            console.log(remainingTime)
         }
         appState.current = nextAppState;
     };
-    const getremainingTime = async () => {
+    const getElapsedTime = async () => {
         try {
             const startTime = userData.lastSubmission;
             const now = new Date();
-            return differenceInSeconds(now, Date.parse(startTime));
+            return (intervalToDuration({
+                start: parseISO(startTime).getDate(),
+                end: set(now, {date: now.getDate() + 1, hours: 0, minutes: 0, seconds: 0})
+            }))
+
         } catch (err) {
-            // TODO: handle errors from setItem properly
             console.warn(err);
         }
     };
@@ -106,7 +111,7 @@ export default function DashboardScreen({navigation}) {
                             <MaterialCommIcon color='white' size={22}
                                               name={userData.hasGuessed ? 'clock-check' : 'clock-time-four'}/>
                             <Text
-                                style={styles.buttonStatusText}>{!userData.hasGuessed ? 'Submitted.' : elapsed}</Text>
+                                style={styles.buttonStatusText}>{!userData.hasGuessed ? 'Submitted.' : (remainingTime.hours + ':' + remaining.minutes + ':' + remaining.seconds)}</Text>
                         </View>
                         <View style={styles.divider}/>
                         <Text style={styles.buttonStatusText}>Submit your{'\n'}prediction.</Text>

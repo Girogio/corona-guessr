@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {FlatList, Image, StatusBar, Text, TouchableOpacity, View} from "react-native";
-import {Badge, Header, withBadge} from "react-native-elements";
+import {Header,} from "react-native-elements";
 import Colors from "../../../assets/colors/Colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import MyStyles from "../../../assets/styles/MyStyles";
-import {dailyData} from "../../../assets/data/dailyData";
 import firebase from "firebase";
 
 
 function renderItem({item}) {
+
+
     const BadgedIcon = (Icon)
     return (
         <View style={{
@@ -69,14 +70,12 @@ function renderItem({item}) {
 export default function TodaysPredictionScreen({navigation}) {
 
     const [allPredictions, setAllPredictions] = useState([])
-    const now = new Date();
-
+    const [isFetching, setIsFetching] = useState(true)
 
     useEffect(() => {
-
         firebase.database()
             .ref('users/')
-            .on('value', snapshot => {
+            .once('value', snapshot => {
                 const toPredictions = []
                 snapshot.forEach(user => {
                     toPredictions.push({
@@ -87,8 +86,35 @@ export default function TodaysPredictionScreen({navigation}) {
                     })
                 })
                 setAllPredictions(toPredictions)
-            });
+                console.log(allPredictions)
+            }).then(r => {
+            setIsFetching(false)
+        })
     }, [])
+
+    function onRefresh() {
+
+        firebase.database()
+            .ref('users/')
+            .once('value', snapshot => {
+                const toPredictions = []
+                snapshot.forEach(user => {
+                    toPredictions.push({
+                        uid: user.key,
+                        name: user.val().displayName,
+                        guess: user.child('guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/guess').val(),
+                        hasGuessed: user.val().hasGuessed,
+                    })
+                })
+                setAllPredictions(toPredictions)
+                console.log(allPredictions)
+            }).then(r => {
+            setIsFetching(false)
+        })
+
+    }
+
+    const now = new Date();
 
 
     return (
@@ -111,6 +137,8 @@ export default function TodaysPredictionScreen({navigation}) {
                 <FlatList
                     data={allPredictions.sort((a, b) => b.hasGuessed - a.hasGuessed)}
                     renderItem={renderItem}
+                    onRefresh={() => onRefresh()}
+                    refreshing={isFetching}
                     keyExtractor={item => item.uid}/>
             </View>
 
