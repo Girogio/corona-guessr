@@ -11,7 +11,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import LoginScreen from "./src/screens/loginFlow/LoginScreen";
 import RegisterScreen from "./src/screens/loginFlow/RegisterScreen";
 import ForgotPasswordScreen from "./src/screens/loginFlow/ForgotPasswordScreen";
-import MySplashScreen from "./src/screens/MySplashScreen";
 import DashboardScreen from "./src/screens/homeFlow/DashboardScreen";
 import LeaderboardScreen from "./src/screens/leaderboardFlow/LeaderboardScreen";
 import ProfileScreen from "./src/screens/profileFlow/ProfileScreen";
@@ -33,6 +32,8 @@ import "firebase/auth";
 import firebaseConfig from "./auth";
 import ResetPasswordScreen from "./src/screens/profileFlow/ResetPasswordScreen";
 import OptionsScreen from "./src/screens/profileFlow/OptionsScreen";
+import {Image, StatusBar, View} from "react-native";
+import {Video, AVPlaybackStatus} from "expo-av";
 
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
@@ -168,12 +169,8 @@ function MainStack() {
 
 export default function App() {
     const [isLoading, setIsLoading] = useState(true)
-
-    useEffect(() => {
-        setTimeout(() => {
-            setIsLoading(false)
-        }, 4000)
-    }, [])
+    const video = React.useRef(null);
+    const [status, setStatus] = React.useState({});
 
 
     const [currentUser, setCurrentUser] = React.useState(null)
@@ -198,7 +195,37 @@ export default function App() {
     } else {
         return (
             <NavigationContainer>
-                {isLoading ? (<MySplashScreen/>)
+                {!status.didJustFinish ? (
+
+                        <View style={{backgroundColor: '#0c0c0c', flex: 1}}>
+                            <StatusBar style="light"/>
+
+                            <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+                                <Video source={require('./assets/images/GuessyaAnimSplashscreen.mp4')}
+                                       style={{
+                                           height: 1080,
+                                           width: 1920,
+                                           scaleX: 0.15,
+                                           scaleY: 0.15,
+                                           alignSelf: 'center',
+                                           marginBottom: 80
+                                       }}
+                                       controls={false}
+                                       ref={video}
+
+                                       onPlaybackStatusUpdate={status => setStatus(() => status)}
+                                       onLoad={() => video.current.playAsync()}
+                                       resizeMode="stretch"
+                                />
+                            </View>
+
+                            <Image
+
+                                source={require('./assets/images/devlabel.png')}
+                                style={{height: 37, width: 96, alignSelf: 'center', marginBottom: 80}}/>
+                        </View>
+
+                    )
                     : (!currentUser) ? (LoginStack())
                         : (MainStack())}
             </NavigationContainer>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {
     View,
     StyleSheet,
@@ -7,42 +7,40 @@ import {
     StatusBar,
     Image,
     ScrollView,
-    TouchableNativeFeedback, TouchableOpacity, FlatList
+    TouchableNativeFeedback, TouchableOpacity, FlatList, AppState, AsyncStorage
 } from "react-native";
 import {Header} from 'react-native-elements'
 import Icon from "react-native-vector-icons/Ionicons";
+import MaterialCommIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Colors from "../../../assets/colors/Colors";
 import firebase from "firebase/app";
 import 'firebase/auth'
+import {differenceInSeconds} from "date-fns";
+
 import MyStyles from "../../../assets/styles/MyStyles";
-import DashboardButtons from "../../../assets/data/DashboardButtons";
 
 export default function DashboardScreen({navigation}) {
-
-    function renderDashboardButton({item}) {
-        return (
-            <TouchableNativeFeedback onPress={() => navigation.navigate(item.screen)}>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.buttonTitleText}>{item.title}</Text>
-                    <View style={styles.buttonStatusContainer}>
-                        <Icon color='white' size={22} name={item.icon}/>
-                        <Text style={styles.buttonStatusText}>{item.statusText}</Text>
-                    </View>
-                    <View style={styles.divider}/>
-                    <Text style={styles.buttonStatusText}>{item.subtitleText}</Text>
-                </View>
-            </TouchableNativeFeedback>
-        )
-    }
+    const appState = useRef(AppState.currentState);
+    const [elapsed, setElapsed] = useState(0);
 
     const [userData, setUserData] = useState({
         date_created: '',
         displayName: '',
         email: '',
         rank: '',
+        hasGuessed: false,
     });
 
     useEffect(() => {
+        const now = new Date()
+
+        const id = setInterval(() => {
+            setElapsed(elapsed + 1)
+        }, 1000)
+
+        //todo fix real time timer
+
+
         firebase.database()
             .ref('users/' + firebase.auth().currentUser.uid)
             .on('value', snapshot => {
@@ -51,11 +49,38 @@ export default function DashboardScreen({navigation}) {
                     displayName: snapshot.val().displayName,
                     email: snapshot.val().email,
                     rank: snapshot.val().rank,
-                    achievements: snapshot.val().achievements
+                    hasGuessed: snapshot.val().hasGuessed,
+                    achievements: snapshot.val().achievements,
+                    lastSubmission: snapshot.child('/guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/submitted').val()
                 }
                 setUserData(userStuff)
+
+                AppState.addEventListener("change", handleAppStateChange);
+                return () => AppState.removeEventListener("change", handleAppStateChange);
             });
-    }, [])
+
+    }, [elapsed])
+    const handleAppStateChange = async (nextAppState) => {
+        if (appState.current.match(/inactive|background/) &&
+            nextAppState === "active") {
+            // We just became active again: recalculate elapsed time based
+            // on what we stored in AsyncStorage when we started.
+            const elapsed = await getElapsedTime();
+            // Update the elapsed seconds state
+            setElapsed(elapsed);
+        }
+        appState.current = nextAppState;
+    };
+    const getremainingTime = async () => {
+        try {
+            const startTime = userData.lastSubmission;
+            const now = new Date();
+            return differenceInSeconds(now, Date.parse(startTime));
+        } catch (err) {
+            // TODO: handle errors from setItem properly
+            console.warn(err);
+        }
+    };
 
     return (
         <View style={MyStyles.container}>
@@ -72,13 +97,35 @@ export default function DashboardScreen({navigation}) {
             </Text>
             <Image style={styles.maltaImage} source={require('../../../assets/images/MALTA.png')}/>
             {/*Button 1*/}
-            <View style={{marginTop: 50}}>
-                <FlatList data={DashboardButtons}
-                          renderItem={renderDashboardButton}
-                          keyExtractor={(item) => (item.id)}
-                          numColumns={2}
-
-                />
+            <View style={{marginTop: 50, flexDirection: 'row'}}>
+                {/*Button 1*/}
+                <TouchableNativeFeedback onPress={() => navigation.navigate('SubmitPrediction')}>
+                    <View style={styles.leftButtonContainer}>
+                        <Text style={styles.buttonTitleText}>Your{'\n'}Prediction</Text>
+                        <View style={styles.buttonStatusContainer}>
+                            <MaterialCommIcon color='white' size={22}
+                                              name={userData.hasGuessed ? 'clock-check' : 'clock-time-four'}/>
+                            <Text
+                                style={styles.buttonStatusText}>{!userData.hasGuessed ? 'Submitted.' : elapsed}</Text>
+                        </View>
+                        <View style={styles.divider}/>
+                        <Text style={styles.buttonStatusText}>Submit your{'\n'}prediction.</Text>
+                    </View>
+                </TouchableNativeFeedback>
+                {/*Button 2*/}
+                <TouchableNativeFeedback onPress={() => navigation.navigate('TodaysPredictions')}>
+                    <View style={styles.rightButtonContainer}>
+                        <View>
+                            <Text style={styles.buttonTitleText}>Today's{'\n'}Predictions</Text>
+                        </View>
+                        <View style={styles.buttonStatusContainer}>
+                            <Icon color='white' size={22} name={'people-outline'}/>
+                            <Text style={styles.buttonStatusText}></Text>
+                        </View>
+                        <View style={styles.divider}/>
+                        <Text style={styles.buttonStatusText}>See what others{'\n'}predicted .</Text>
+                    </View>
+                </TouchableNativeFeedback>
             </View>
 
         </View>
@@ -111,11 +158,24 @@ const styles = StyleSheet.create({
         height: 110,
         marginTop: 43
     },
-    buttonContainer: {
+    buttonRows: {
+        marginTop: 50,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    leftButtonContainer: {
         width: 160,
         height: 170,
         paddingLeft: 12,
-        margin: 7.5,
+        paddingRight: 12,
+        backgroundColor: '#252525',
+        borderRadius: 24
+    },
+    rightButtonContainer: {
+        width: 160,
+        height: 170,
+        paddingLeft: 12,
+        marginLeft: 15,
         paddingRight: 12,
         backgroundColor: '#252525',
         borderRadius: 24
@@ -150,6 +210,7 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 11
     }
+
 
 })
 

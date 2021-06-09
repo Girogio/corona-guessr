@@ -19,14 +19,15 @@ function renderItem({item}) {
             marginBottom: 20,
             alignItems: 'center',
             justifyContent: 'space-between',
-            width: '85%',
+            width: '75%',
             borderRadius: 30
         }}>
             {/*Profile stuff*/}
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View>
-                    <Image style={{width: 58, height: 58, borderRadius: 29, marginLeft: 15}} source={item.image}/>
-                    {item.hasPredicted
+                    <Image style={{width: 58, height: 58, borderRadius: 29, marginLeft: 15}}
+                           source={require('../../../assets/images/justin.jpg')}/>
+                    {item.hasGuessed
                         ? <BadgedIcon type="ionicon"
                                       name={"checkmark-circle"}
                                       style={{color: 'white', position: 'absolute', bottom: 0, right: -9}}
@@ -38,7 +39,7 @@ function renderItem({item}) {
                     paddingLeft: 11,
                     fontFamily: 'Poppins-SemiBold',
                     fontSize: 13
-                }}>{item.displayName}</Text>
+                }}>{item.name}</Text>
             </View>
 
             {/*Guess number*/}
@@ -54,11 +55,11 @@ function renderItem({item}) {
                 marginRight: 24
             }}>
                 <Text style={{
-                    color: item.hasPredicted ? Colors.lighterPrimary : 'red',
+                    color: item.hasGuessed ? Colors.lighterPrimary : 'red',
                     fontFamily: 'Poppins-SemiBold',
                     fontSize: 10,
                 }}>
-                    {item.hasPredicted ? 'Predicted: ' + item.guess : 'N/A'}
+                    {item.hasGuessed ? 'Predicted: ' + item.guess : 'N/A'}
                 </Text>
             </View>
         </View>
@@ -67,48 +68,28 @@ function renderItem({item}) {
 
 export default function TodaysPredictionScreen({navigation}) {
 
-    const [allUsers, setAllusers] = useState([])
     const [allPredictions, setAllPredictions] = useState([])
     const now = new Date();
 
 
     useEffect(() => {
 
-
-        firebase.database()
-            .ref('guesses/' + now.getDate() + '_' + (now.getMonth() + 1) + '_' + now.getFullYear())
-            .on('value', snapshot => {
-                const toPredictions = []
-                snapshot.forEach(guess => {
-                    toPredictions.push({
-                        guess: guess.val().guess,
-                        hasGuessed: 2,
-                        uid: guess.key,
-                    })
-                })
-                setAllPredictions(toPredictions)
-
-            });
-
         firebase.database()
             .ref('users/')
             .on('value', snapshot => {
-                const toAllUsers = []
+                const toPredictions = []
                 snapshot.forEach(user => {
-                    toAllUsers.push({
+                    toPredictions.push({
                         uid: user.key,
-                        displayName: user.val().displayName,
+                        name: user.val().displayName,
+                        guess: user.child('guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/guess').val(),
                         hasGuessed: user.val().hasGuessed,
                     })
                 })
-                setAllusers(toAllUsers)
-
-            })
+                setAllPredictions(toPredictions)
+            });
     }, [])
 
-    function getHasGuessedByUid({uid}) {
-        console.log(allUsers.filter(user => user.uid === '3M3FgI9WNXOvh4lDH9otvsbZWem2'))
-    }
 
     return (
         <View style={MyStyles.container}>
@@ -126,10 +107,13 @@ export default function TodaysPredictionScreen({navigation}) {
                     containerStyle={[MyStyles.mainHeaderContainer, {paddingBottom: 30}]}
                     centerContainerStyle={MyStyles.mainHeaderCenterContainer}
             />
-            <FlatList
-                data={dailyData.sort((a, b) => b.hasPredicted - a.hasPredicted)}
-                renderItem={renderItem}
-                keyExtractor={item => item.id}/>
+            <View style={{alignItems: 'center', justifyContent: 'flex-start'}}>
+                <FlatList
+                    data={allPredictions.sort((a, b) => b.hasGuessed - a.hasGuessed)}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.uid}/>
+            </View>
+
         </View>
     )
 }

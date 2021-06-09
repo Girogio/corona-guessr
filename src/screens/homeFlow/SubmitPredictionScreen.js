@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     Image,
     TextInput,
-    TouchableWithoutFeedback, Keyboard
+    TouchableWithoutFeedback, Keyboard, AsyncStorage
 } from "react-native";
 import Colors from "../../../assets/colors/Colors";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -36,8 +36,9 @@ export default function SubmitPredictionScreen({navigation}) {
     function submitGuess() {
         const now = new Date();
         if (!hasGuessed) {
-            firebase.database().ref('guesses/' + now.getDate() + '_' + (now.getMonth() + 1) + '_' + now.getFullYear() + '/' + user.uid + '/guess').set(guess).then(r => {
+            firebase.database().ref('users/' + user.uid + '/guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/guess').set(guess).then(r => {
                 setHasGuessed(true)
+                firebase.database().ref('users/' + user.uid + '/guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/submitted').set(now.toISOString()).then()
                 firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/hasGuessed').set(true).then()
             })
 
