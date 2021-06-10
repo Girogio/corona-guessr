@@ -70,53 +70,25 @@ function renderItem({item}) {
 export default function TodaysPredictionScreen({navigation}) {
 
     const [allPredictions, setAllPredictions] = useState([])
-    const [isFetching, setIsFetching] = useState(true)
 
     useEffect(() => {
         firebase.database()
             .ref('users/')
-            .once('value', snapshot => {
+            .on('value', snapshot => {
                 const toPredictions = []
                 snapshot.forEach(user => {
                     toPredictions.push({
                         uid: user.key,
                         name: user.val().displayName,
                         guess: user.child('guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/guess').val(),
-                        hasGuessed: user.val().hasGuessed,
+                        hasGuessed: user.child('guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/hasGuessed').val() !== null,
                     })
                 })
                 setAllPredictions(toPredictions)
-                console.log(allPredictions)
-            }).then(r => {
-            setIsFetching(false)
-        })
+            })
     }, [])
 
-    function onRefresh() {
-
-        firebase.database()
-            .ref('users/')
-            .once('value', snapshot => {
-                const toPredictions = []
-                snapshot.forEach(user => {
-                    toPredictions.push({
-                        uid: user.key,
-                        name: user.val().displayName,
-                        guess: user.child('guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/guess').val(),
-                        hasGuessed: user.val().hasGuessed,
-                    })
-                })
-                setAllPredictions(toPredictions)
-                console.log(allPredictions)
-            }).then(r => {
-            setIsFetching(false)
-        })
-
-    }
-
     const now = new Date();
-
-
     return (
         <View style={MyStyles.container}>
             <StatusBar style="light"/>
@@ -137,8 +109,6 @@ export default function TodaysPredictionScreen({navigation}) {
                 <FlatList
                     data={allPredictions.sort((a, b) => b.hasGuessed - a.hasGuessed)}
                     renderItem={renderItem}
-                    onRefresh={() => onRefresh()}
-                    refreshing={isFetching}
                     keyExtractor={item => item.uid}/>
             </View>
 

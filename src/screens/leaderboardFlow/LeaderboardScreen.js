@@ -1,11 +1,12 @@
-import React, {Component} from "react";
+import React, {Component, useEffect, useState} from "react";
 import {FlatList, Image, StatusBar, Text, TouchableOpacity, View} from "react-native";
 import MyStyles from "../../../assets/styles/MyStyles";
 import {Header} from "react-native-elements";
 import Colors from "../../../assets/colors/Colors";
 import leaderboardData from "../../../assets/data/leaderboardData";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
-
+import firebase from 'firebase/app'
+import 'firebase/database'
 
 const rerenderLeaderboardItem = ({item}) => {
     return (
@@ -65,10 +66,61 @@ const rerenderLeaderboardItem = ({item}) => {
 }
 
 export default function LeaderboardScreen() {
+
+    const [leaderboard, setLeaderboard] = useState([
+        {
+            name: '',
+            points: '',
+            position: '',
+            hasIncreased: false,
+        }
+    ])
+
+    const [userData, setUserData] = useState([
+        {
+            uid: '',
+            name: '',
+            guesses: [],
+            points: '',
+            position: '',
+            hasIncreased: false,
+
+        }
+    ])
+
+    useEffect(() => {
+        firebase.database().ref('users/').on('value', snapshot => {
+            let toUserDataDotGuesses = []
+            let toUserData = []
+            snapshot.forEach(user => {
+                user.child('/guesses/').forEach(guess => {
+                    toUserDataDotGuesses.push({
+                        date: guess.key,
+                        guess: guess.val().guess
+                    })
+                })
+                toUserData.push({
+                    uid: user.key,
+                    name: user.val().displayName,
+                    guesses: toUserDataDotGuesses,
+                })
+
+                toUserDataDotGuesses = []
+            })
+            setUserData(toUserData)
+            console.log(userData)
+        })
+
+
+        //TODO CALCULATE LEADERBOARD
+
+
+    }, [])
     return (
         <Main/>
     )
 }
+
 
 class Main extends Component {
 

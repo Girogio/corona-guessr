@@ -3,11 +3,9 @@ import {
     View,
     StyleSheet,
     Text,
-    Platform,
     StatusBar,
     Image,
-    ScrollView,
-    TouchableNativeFeedback, TouchableOpacity, FlatList, AppState, AsyncStorage
+    TouchableNativeFeedback, AppState,
 } from "react-native";
 import {Header} from 'react-native-elements'
 import Icon from "react-native-vector-icons/Ionicons";
@@ -16,18 +14,22 @@ import Colors from "../../../assets/colors/Colors";
 import firebase from "firebase/app";
 import 'firebase/auth'
 
-const timer = require('react-native-timer');
 
-import {set, intervalToDuration, parseISO} from "date-fns";
+import {set, intervalToDuration,} from "date-fns";
 
 import MyStyles from "../../../assets/styles/MyStyles";
 
+
 export default function DashboardScreen({navigation}) {
+
+
     const appState = useRef(AppState.currentState);
+
+
     const [remaining, setRemaining] = useState({
-        hours: '00',
-        minutes: '00',
-        seconds: '00'
+        hours: '--',
+        minutes: '--',
+        seconds: '--',
     });
 
     const [userData, setUserData] = useState({
@@ -35,56 +37,53 @@ export default function DashboardScreen({navigation}) {
         displayName: '',
         email: '',
         rank: '',
-        hasGuessed: false,
+        hasGuessed: true,
     });
 
     useEffect(() => {
+
         const now = new Date()
+        const predictionUpdate = setInterval(() => {
+            setRemainingTime().then({})
+        }, 1000)
 
 
         firebase.database()
             .ref('users/' + firebase.auth().currentUser.uid)
-            .once('value', snapshot => {
+            .on('value', snapshot => {
                 const userStuff = {
                     date_created: snapshot.val().date_created,
                     displayName: snapshot.val().displayName,
                     email: snapshot.val().email,
                     rank: snapshot.val().rank,
-                    hasGuessed: snapshot.val().hasGuessed,
+                    hasGuessed: snapshot.child('/guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/hasGuessed').val() !== null,
                     achievements: snapshot.val().achievements,
-                    lastSubmission: snapshot.child('/guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/submitted').val()
                 }
                 setUserData(userStuff)
-
                 AppState.addEventListener("change", handleAppStateChange);
                 return () => AppState.removeEventListener("change", handleAppStateChange);
-            }).then({});
-
-    }, [remaining, setRemaining])
+            });
+    }, [])
 
     const handleAppStateChange = async (nextAppState) => {
         if (appState.current.match(/inactive|background/) &&
             nextAppState === "active") {
-
-            let remainingTime = await getElapsedTime();
-            setRemaining(remainingTime)
-
-            console.log(remainingTime)
+            await setRemainingTime();
         }
         appState.current = nextAppState;
     };
-    const getElapsedTime = async () => {
-        try {
-            const startTime = userData.lastSubmission;
-            const now = new Date();
-            return (intervalToDuration({
-                start: parseISO(startTime).getDate(),
-                end: set(now, {date: now.getDate() + 1, hours: 0, minutes: 0, seconds: 0})
-            }))
 
-        } catch (err) {
-            console.warn(err);
-        }
+    const setRemainingTime = async () => {
+
+        const now = new Date();
+        const midnight = set(new Date(), {date: now.getDate() + 1, hours: 0, minutes: 0, seconds: 0})
+
+        setRemaining(intervalToDuration({
+                start: now,
+                end: midnight
+            }
+        ));
+
     };
 
     return (
@@ -104,19 +103,28 @@ export default function DashboardScreen({navigation}) {
             {/*Button 1*/}
             <View style={{marginTop: 50, flexDirection: 'row'}}>
                 {/*Button 1*/}
-                <TouchableNativeFeedback onPress={() => navigation.navigate('SubmitPrediction')}>
+                <TouchableNativeFeedback
+
+                    onPress={() => userData.hasGuessed ? null : navigation.navigate('SubmitPrediction')}>
                     <View style={styles.leftButtonContainer}>
                         <Text style={styles.buttonTitleText}>Your{'\n'}Prediction</Text>
                         <View style={styles.buttonStatusContainer}>
                             <MaterialCommIcon color='white' size={22}
                                               name={userData.hasGuessed ? 'clock-check' : 'clock-time-four'}/>
                             <Text
-                                style={styles.buttonStatusText}>{!userData.hasGuessed ? 'Submitted.' : (remainingTime.hours + ':' + remaining.minutes + ':' + remaining.seconds)}</Text>
+                                style={styles.buttonStatusText}>{
+                                !userData.hasGuessed ?
+                                    'Take a guess!'
+                                    : (remaining.hours < 10 ? '0' + remaining.hours : remaining.hours)
+                                    + ':' + (remaining.minutes < 10 ? '0' + remaining.minutes : remaining.minutes)
+                                    + ':' + (remaining.seconds < 10 ? '0' + remaining.seconds : remaining.seconds)}</Text>
                         </View>
                         <View style={styles.divider}/>
-                        <Text style={styles.buttonStatusText}>Submit your{'\n'}prediction.</Text>
+                        <Text
+                            style={styles.buttonStatusText}>{userData.hasGuessed ? 'Please wait till tomorrow.' : 'Submit your' + '\n' +  'prediction.'}</Text>
                     </View>
                 </TouchableNativeFeedback>
+
                 {/*Button 2*/}
                 <TouchableNativeFeedback onPress={() => navigation.navigate('TodaysPredictions')}>
                     <View style={styles.rightButtonContainer}>
@@ -132,7 +140,6 @@ export default function DashboardScreen({navigation}) {
                     </View>
                 </TouchableNativeFeedback>
             </View>
-
         </View>
     )
 }

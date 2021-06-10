@@ -3,12 +3,10 @@ import {
     View,
     Text,
     StyleSheet,
-    Platform,
-    StatusBar,
     TouchableOpacity,
     Image,
     TextInput,
-    TouchableWithoutFeedback, Keyboard, AsyncStorage
+    TouchableWithoutFeedback, Keyboard,
 } from "react-native";
 import Colors from "../../../assets/colors/Colors";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -23,26 +21,15 @@ export default function SubmitPredictionScreen({navigation}) {
     const user = firebase.auth().currentUser;
     const [guessFocus, setGuessFocus] = useState(false);
     const guessFocusStyle = guessFocus ? MyStyles.textInputFocus : MyStyles.textInputBlurred;
-
-    const [hasGuessed, setHasGuessed] = useState(false);
-    const [guess, setGuess] = useState('')
-
-    useEffect(() => {
-        firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/hasGuessed')
-            .once('value')
-            .then(snapshot => setGuess(snapshot.val()))
-    }, [setGuess, setHasGuessed])
+    const [guess, setGuess] = useState(-1)
 
     function submitGuess() {
         const now = new Date();
-        if (!hasGuessed) {
-            firebase.database().ref('users/' + user.uid + '/guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/guess').set(guess).then(r => {
-                setHasGuessed(true)
-                firebase.database().ref('users/' + user.uid + '/guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/submitted').set(now.toISOString()).then()
-                firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/hasGuessed').set(true).then()
+        firebase.database().ref('users/' + user.uid + '/guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/guess').set(guess).then(() => {
+            firebase.database().ref('users/' + user.uid + '/guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/hasGuessed').set(true).then(() => {
+                navigation.pop(1);
             })
-
-        }
+        })
     }
 
     return (
@@ -51,7 +38,8 @@ export default function SubmitPredictionScreen({navigation}) {
                 <Header backgroundColor={Colors.darkBackground}
                         leftComponent={
                             <TouchableOpacity onPress={() => navigation.pop(1)}>
-                                <Icon name={'ios-chevron-back'} size={30} color={'white'} style={{paddingLeft: 35}}/>
+                                <Icon name={'ios-chevron-back'} size={30} color={'white'}
+                                      style={{paddingLeft: 35}}/>
                             </TouchableOpacity>
                         }
                         leftContainerStyle={MyStyles.mainHeaderLeftContainer}

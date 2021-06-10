@@ -17,9 +17,9 @@ import ProfileScreen from "./src/screens/profileFlow/ProfileScreen";
 import SubmitPredictionScreen from "./src/screens/homeFlow/SubmitPredictionScreen";
 import TodaysPredictionScreen from "./src/screens/homeFlow/TodaysPredictionScreen";
 
+
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {useFonts} from "expo-font";
-import AppLoading from "expo-app-loading";
 
 const mainStack = createBottomTabNavigator();
 const loginStack = createStackNavigator();
@@ -34,6 +34,9 @@ import ResetPasswordScreen from "./src/screens/profileFlow/ResetPasswordScreen";
 import OptionsScreen from "./src/screens/profileFlow/OptionsScreen";
 import {Image, StatusBar, View} from "react-native";
 import {Video, AVPlaybackStatus} from "expo-av";
+import {isAfter} from "date-fns";
+import * as Papa from "papaparse";
+
 
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
@@ -170,7 +173,26 @@ function MainStack() {
 export default function App() {
     const video = React.useRef(null);
     const [status, setStatus] = React.useState({});
+    const [casesData, setCasesData] = React.useState([])
 
+
+    useEffect(() => {
+        /*Get the cases ASAP*/
+        Papa.parse('https://raw.githubusercontent.com/COVID19-Malta/COVID19-Cases/master/COVID-19%20Malta%20-%20Aggregate%20Data%20Set.csv', {
+            dynamicTyping: true,
+            header: true,
+            download: true,
+            transformHeader(header: string, index: number): string {
+                return header.replace(" ", "_")
+            },
+            complete: function (results) {
+
+                let path = 'statistics/' + results.data[results.data.length - 2].Date.replace(/\//g, "-") + '/new_cases'
+                firebase.database().ref(path).set(results.data[results.data.length - 2].New_Cases)
+            }
+        })
+
+    })
 
     const [currentUser, setCurrentUser] = React.useState(null)
     firebase.auth().onAuthStateChanged(user => {
@@ -193,36 +215,36 @@ export default function App() {
     return (
         <NavigationContainer>
             {!status.didJustFinish ? (
-                    <View style={{backgroundColor: '#0c0c0c', flex: 1}}>
-                        <StatusBar style="light"/>
+                <View style={{backgroundColor: '#0c0c0c', flex: 1}}>
+                    <StatusBar style="light"/>
 
-                        <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-                            <Video source={require('./assets/images/GuessyaAnimSplashscreen.mp4')}
-                                   style={{
-                                       height: 1080,
-                                       width: 1920,
-                                       scaleX: 0.15,
-                                       scaleY: 0.15,
-                                       alignSelf: 'center',
-                                       marginBottom: 80
-                                   }}
-                                   controls={false}
-                                   ref={video}
+                    <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+                        <Video source={require('./assets/images/GuessyaAnimSplashscreen.mp4')}
+                               style={{
+                                   height: 1080,
+                                   width: 1920,
+                                   scaleX: 0.15,
+                                   scaleY: 0.15,
+                                   alignSelf: 'center',
+                                   marginBottom: 80
+                               }}
+                               controls={false}
+                               ref={video}
 
-                                   onPlaybackStatusUpdate={status => setStatus(() => status)}
-                                   onLoad={() => video.current.playAsync()}
-                                   resizeMode="stretch"
-                            />
-                        </View>
-
-                        <Image
-
-                            source={require('./assets/images/devlabel.png')}
-                            style={{height: 37, width: 96, alignSelf: 'center', marginBottom: 80}}/>
+                               onPlaybackStatusUpdate={status => setStatus(() => status)}
+                               onLoad={() => video.current.playAsync()}
+                               resizeMode="stretch"
+                        />
                     </View>
 
-                )   : (!currentUser) ? (LoginStack())
-                    : (MainStack())}
+                    <Image
+
+                        source={require('./assets/images/devlabel.png')}
+                        style={{height: 37, width: 96, alignSelf: 'center', marginBottom: 80}}/>
+                </View>
+
+            ) : (!currentUser) ? (LoginStack())
+                : (MainStack())}
         </NavigationContainer>
     )
 
