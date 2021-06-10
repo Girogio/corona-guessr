@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, {useState} from "react";
 import GradientButton from "react-native-gradient-buttons";
 import Icon from "react-native-vector-icons/Ionicons";
 import {
@@ -26,10 +26,11 @@ export const addProfile = (name, email, password) => new Promise((resolve, rejec
     firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((res) => {
             firebase.database().ref('/users/' + res.user.uid).set({
-                date_created: d.getTime(),
+                date_created: d.toISOString(),
                 email: email,
                 displayName: name,
-                rank: 'Wandering Guesser'
+                rank: 'Wandering Guesser',
+                points: 0,
             })
         })
 

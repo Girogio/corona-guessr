@@ -21,12 +21,13 @@ export default function SubmitPredictionScreen({navigation}) {
     const user = firebase.auth().currentUser;
     const [guessFocus, setGuessFocus] = useState(false);
     const guessFocusStyle = guessFocus ? MyStyles.textInputFocus : MyStyles.textInputBlurred;
-    const [guess, setGuess] = useState(-1)
+    const [guess, setGuess] = useState(0)
 
     function submitGuess() {
         const now = new Date();
-        firebase.database().ref('users/' + user.uid + '/guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/guess').set(guess).then(() => {
-            firebase.database().ref('users/' + user.uid + '/guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/hasGuessed').set(true).then(() => {
+        const path = 'users/' + user.uid + '/guesses/' + (now.getDate() + 1 < 10 ? '0' + now.getDate() + 1 : (now.getDate() + 1)) + '-' + ((now.getMonth() + 1) < 10 ? '0' + (now.getMonth() + 1) : (now.getMonth() + 1)) + '-' + now.getFullYear()
+        firebase.database().ref(path + '/guess').set(guess).then(() => {
+            firebase.database().ref(path + '/hasGuessed').set(true).then(() => {
                 navigation.pop(1);
             })
         })

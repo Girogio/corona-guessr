@@ -6,6 +6,7 @@ import Colors from "../../../assets/colors/Colors";
 import leaderboardData from "../../../assets/data/leaderboardData";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import firebase from 'firebase/app'
+import {getDate, getMonth} from 'date-fns'
 import 'firebase/database'
 
 const rerenderLeaderboardItem = ({item}) => {
@@ -75,49 +76,88 @@ export default function LeaderboardScreen() {
             hasIncreased: false,
         }
     ])
+    const [caseStatistics, setCaseStatistics] = useState([])
+    const [userData, setUserData] = useState([])
 
-    const [userData, setUserData] = useState([
-        {
-            uid: '',
-            name: '',
-            guesses: [],
-            points: '',
-            position: '',
-            hasIncreased: false,
-
-        }
-    ])
 
     useEffect(() => {
-        firebase.database().ref('users/').on('value', snapshot => {
-            let toUserDataDotGuesses = []
-            let toUserData = []
-            snapshot.forEach(user => {
-                user.child('/guesses/').forEach(guess => {
-                    toUserDataDotGuesses.push({
-                        date: guess.key,
-                        guess: guess.val().guess
+            /*Update User Data*/
+            firebase.database().ref('users/').on('value', snapshot => {
+                const toUserData = []
+                let toUserDataDotGuesses = []
+                snapshot.forEach(user => {
+                    user.child('/guesses/').forEach(guess => {
+                        toUserDataDotGuesses.push({
+                            date: guess.key,
+                            guess: guess.val().guess
+                        })
+                    })
+                    toUserData.push({
+                        uid: user.key,
+                        name: user.val().displayName,
+                        points: user.child('/score/points').val(),
+                        guesses: toUserDataDotGuesses,
+                        position: user.child('/score/position').val(),
+                    })
+
+                    toUserDataDotGuesses = []
+                })
+                setUserData(toUserData)
+                console.log(toUserData)
+            })
+
+            /*Update Statistics*/
+            firebase.database().ref('statistics/').on('value', snapshot => {
+                const toStatistics = []
+                snapshot.forEach(day => {
+                    toStatistics.push({
+                        date: day.key,
+                        new_cases: day.val().new_cases
                     })
                 })
-                toUserData.push({
-                    uid: user.key,
-                    name: user.val().displayName,
-                    guesses: toUserDataDotGuesses,
-                })
-
-                toUserDataDotGuesses = []
+                setCaseStatistics(toStatistics)
             })
-            setUserData(toUserData)
-            console.log(userData)
-        })
+
+            /*Set all user points*/
+            userData.forEach(user => {
+                    user.points = 0
+                    user.guesses.forEach(guess => {
+                        caseStatistics.forEach((entry) => {
+                            if (guess.date === entry.date)
+                                if (guess.guess == entry.new_cases)
+                                    ++user.points;
+                        })
 
 
-        //TODO CALCULATE LEADERBOARD
+                    })
+                    firebase.database().ref('users/' + user.uid + '/score/points').set(user.points).then(() => {
 
+                    })
 
-    }, [])
+                }
+            )
+            setUserData(userData.sort((a, b) => {
+                return b.points - a.points;
+            }))
+
+            userData.forEach(user => {
+               /// if (user.score)
+                    firebase.database().ref('users/' + user.uid + '/score/position').set((userData.indexOf((user)) + 1))
+            })
+        },
+        []
+    )
+//
+
     return (
-        <Main/>
+        <View>
+            <FlatList
+                data={userData}
+                renderItem={rerenderLeaderboardItem}
+                keyExtractor={item => item.uid}
+                initialNumToRender={3}
+            />
+        </View>
     )
 }
 
@@ -133,6 +173,7 @@ class Main extends Component {
                         centerComponent={
                             <TouchableOpacity
                                 onPress={() => {
+
                                     this.flatListRef.scrollToIndex({animated: true, index: 0})
                                 }}>
                                 <Text style={MyStyles.mainHeaderText}>LEADERBOARD</Text>
@@ -141,13 +182,13 @@ class Main extends Component {
                         containerStyle={MyStyles.mainHeaderContainer}
                 />
 
-                <View style={{
+                {/*<View style={{
                     alignItems: 'flex-end',
                     flexDirection: 'row',
                     marginTop: 19,
                     paddingBottom: 20
                 }}>
-                    {/*Robert*/}
+                    Robert
                     <View style={{alignItems: 'center'}}>
                         <MaterialIcon
                             name={'arrow-drop-up'}
@@ -187,7 +228,7 @@ class Main extends Component {
                             <Text style={{color: '#19D4F8', fontSize: 10}}>2 points</Text>
                         </View>
                     </View>
-                    {/*Justin*/}
+                    Justin
                     <View style={{alignItems: 'center'}}>
                         <MaterialIcon
                             name={'arrow-drop-up'}
@@ -232,7 +273,7 @@ class Main extends Component {
                             <Text style={{color: '#19D4F8', fontSize: 10}}>2 points</Text>
                         </View>
                     </View>
-                    {/*Roman*/}
+                    Roman
                     <View style={{alignItems: 'center'}}>
                         <MaterialIcon
                             name={'arrow-drop-down'}
@@ -273,20 +314,8 @@ class Main extends Component {
                     </View>
 
 
-                </View>
-                <View>
-                    <FlatList
-                        ref={(ref) => {
-                            this.flatListRef = ref;
-                        }}
-                        data={leaderboardData}
-                        renderItem={rerenderLeaderboardItem}
-                        keyExtractor={item => item.id}
-                        initialNumToRender={3}
-                        {...this.props}
+                </View>*/}
 
-                    />
-                </View>
 
             </View>
         )

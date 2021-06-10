@@ -173,8 +173,6 @@ function MainStack() {
 export default function App() {
     const video = React.useRef(null);
     const [status, setStatus] = React.useState({});
-    const [casesData, setCasesData] = React.useState([])
-
 
     useEffect(() => {
         /*Get the cases ASAP*/
@@ -188,7 +186,7 @@ export default function App() {
             complete: function (results) {
 
                 let path = 'statistics/' + results.data[results.data.length - 2].Date.replace(/\//g, "-") + '/new_cases'
-                firebase.database().ref(path).set(results.data[results.data.length - 2].New_Cases)
+                firebase.database().ref(path).set(results.data[results.data.length - 2].New_Cases).then()
             }
         })
 
@@ -197,7 +195,6 @@ export default function App() {
     const [currentUser, setCurrentUser] = React.useState(null)
     firebase.auth().onAuthStateChanged(user => {
         setCurrentUser(user)
-
     });
 
     let [fontsLoaded] = useFonts({

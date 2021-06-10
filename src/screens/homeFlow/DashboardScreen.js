@@ -47,6 +47,7 @@ export default function DashboardScreen({navigation}) {
             setRemainingTime().then({})
         }, 1000)
 
+        const path = '/guesses/' + (now.getDate() + 1 < 10 ? '0' + now.getDate() + 1 : (now.getDate() + 1)) + '-' + ((now.getMonth() + 1) < 10 ? '0' + (now.getMonth() + 1) : (now.getMonth() + 1)) + '-' + now.getFullYear()
 
         firebase.database()
             .ref('users/' + firebase.auth().currentUser.uid)
@@ -56,7 +57,7 @@ export default function DashboardScreen({navigation}) {
                     displayName: snapshot.val().displayName,
                     email: snapshot.val().email,
                     rank: snapshot.val().rank,
-                    hasGuessed: snapshot.child('/guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/hasGuessed').val() !== null,
+                    hasGuessed: snapshot.child(path + '/hasGuessed').val() !== null,
                     achievements: snapshot.val().achievements,
                 }
                 setUserData(userStuff)
@@ -121,7 +122,7 @@ export default function DashboardScreen({navigation}) {
                         </View>
                         <View style={styles.divider}/>
                         <Text
-                            style={styles.buttonStatusText}>{userData.hasGuessed ? 'Please wait till tomorrow.' : 'Submit your' + '\n' +  'prediction.'}</Text>
+                            style={styles.buttonStatusText}>{userData.hasGuessed ? 'Please wait till tomorrow.' : 'Submit your' + '\n' + 'prediction.'}</Text>
                     </View>
                 </TouchableNativeFeedback>
 

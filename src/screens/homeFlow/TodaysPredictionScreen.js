@@ -76,12 +76,13 @@ export default function TodaysPredictionScreen({navigation}) {
             .ref('users/')
             .on('value', snapshot => {
                 const toPredictions = []
+                const path = '/guesses/' + (now.getDate() + 1 < 10 ? '0' + now.getDate() + 1 : (now.getDate() + 1)) + '-' + ((now.getMonth() + 1) < 10 ? '0' + (now.getMonth() + 1) : (now.getMonth() + 1)) + '-' + now.getFullYear()
                 snapshot.forEach(user => {
                     toPredictions.push({
                         uid: user.key,
                         name: user.val().displayName,
-                        guess: user.child('guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/guess').val(),
-                        hasGuessed: user.child('guesses/' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/hasGuessed').val() !== null,
+                        guess: user.child(path + '/guess').val(),
+                        hasGuessed: user.child(path + '/hasGuessed').val() !== null,
                     })
                 })
                 setAllPredictions(toPredictions)
