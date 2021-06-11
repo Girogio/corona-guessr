@@ -6,7 +6,6 @@ import Colors from "../../../assets/colors/Colors";
 import leaderboardData from "../../../assets/data/leaderboardData";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import firebase from 'firebase/app'
-import {getDate, getMonth} from 'date-fns'
 import 'firebase/database'
 
 const rerenderLeaderboardItem = ({item}) => {
@@ -68,94 +67,94 @@ const rerenderLeaderboardItem = ({item}) => {
 
 export default function LeaderboardScreen() {
 
-    const [leaderboard, setLeaderboard] = useState([
-        {
-            name: '',
-            points: '',
-            position: '',
-            hasIncreased: false,
-        }
-    ])
     const [caseStatistics, setCaseStatistics] = useState([])
     const [userData, setUserData] = useState([])
+    const [isFetching, setIsFetching] = useState(true)
+
+    function onRefresh() {
+        setIsFetching(true)
+        /*Update User Data*/
+        firebase.database().ref('users/').on('value', snapshot => {
+            const toUserData = []
+            let toUserDataDotGuesses = []
+            snapshot.forEach(user => {
+                user.child('/guesses/').forEach(guess => {
+                    toUserDataDotGuesses.push({
+                        date: guess.key,
+                        guess: guess.val().guess
+                    })
+                })
+                toUserData.push({
+                    uid: user.key,
+                    name: user.val().displayName,
+                    points: user.child('/score/points').val(),
+                    guesses: toUserDataDotGuesses,
+                    position: user.child('/score/position').val(),
+                })
+
+                toUserDataDotGuesses = []
+            })
+            setUserData(toUserData)
+        })
+
+        /*Update Statistics*/
+        firebase.database().ref('statistics/').on('value', snapshot => {
+            const toStatistics = []
+            snapshot.forEach(day => {
+                toStatistics.push({
+                    date: day.key,
+                    new_cases: day.val().new_cases
+                })
+            })
+            setCaseStatistics(toStatistics)
+        })
+
+        /*Set all user points*/
+        userData.forEach(user => {
+                user.points = 0
+                user.guesses.forEach(guess => {
+                    caseStatistics.forEach((entry) => {
+                        if (guess.date === entry.date)
+                            if (guess.guess == entry.new_cases)
+                                ++user.points;
+                    })
+
+
+                })
+                firebase.database().ref('users/' + user.uid + '/score/points').set(user.points).then(() => {
+
+                })
+
+            }
+        )
+
+
+        setUserData(userData.sort((a, b) => {
+            return b.points - a.points;
+        }))
+
+        userData.forEach(user => {
+            /// if (user.score)
+            firebase.database().ref('users/' + user.uid + '/score/position').set((userData.indexOf((user)) + 1))
+        })
+        setIsFetching(false)
+    }
 
 
     useEffect(() => {
-            /*Update User Data*/
-            firebase.database().ref('users/').on('value', snapshot => {
-                const toUserData = []
-                let toUserDataDotGuesses = []
-                snapshot.forEach(user => {
-                    user.child('/guesses/').forEach(guess => {
-                        toUserDataDotGuesses.push({
-                            date: guess.key,
-                            guess: guess.val().guess
-                        })
-                    })
-                    toUserData.push({
-                        uid: user.key,
-                        name: user.val().displayName,
-                        points: user.child('/score/points').val(),
-                        guesses: toUserDataDotGuesses,
-                        position: user.child('/score/position').val(),
-                    })
-
-                    toUserDataDotGuesses = []
-                })
-                setUserData(toUserData)
-                console.log(toUserData)
-            })
-
-            /*Update Statistics*/
-            firebase.database().ref('statistics/').on('value', snapshot => {
-                const toStatistics = []
-                snapshot.forEach(day => {
-                    toStatistics.push({
-                        date: day.key,
-                        new_cases: day.val().new_cases
-                    })
-                })
-                setCaseStatistics(toStatistics)
-            })
-
-            /*Set all user points*/
-            userData.forEach(user => {
-                    user.points = 0
-                    user.guesses.forEach(guess => {
-                        caseStatistics.forEach((entry) => {
-                            if (guess.date === entry.date)
-                                if (guess.guess == entry.new_cases)
-                                    ++user.points;
-                        })
-
-
-                    })
-                    firebase.database().ref('users/' + user.uid + '/score/points').set(user.points).then(() => {
-
-                    })
-
-                }
-            )
-            setUserData(userData.sort((a, b) => {
-                return b.points - a.points;
-            }))
-
-            userData.forEach(user => {
-               /// if (user.score)
-                    firebase.database().ref('users/' + user.uid + '/score/position').set((userData.indexOf((user)) + 1))
-            })
-        },
-        []
-    )
-//
+        onRefresh()
+    }, [])
 
     return (
-        <View>
+        <View style={[MyStyles.container, {paddingTop: StatusBar.currentHeight, justifyItems: 'center'}]}>
             <FlatList
-                data={userData}
+                data={userData.sort((a, b) => {
+                    return a.position - b.position;
+                })}
                 renderItem={rerenderLeaderboardItem}
+                onRefresh={() => onRefresh()}
+                refreshing={isFetching}
                 keyExtractor={item => item.uid}
-                initialNumToRender={3}
             />
         </View>
     )
