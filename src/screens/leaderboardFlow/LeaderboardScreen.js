@@ -73,10 +73,10 @@ export default function LeaderboardScreen() {
     const [caseStatistics, setCaseStatistics] = useState([])
     const [userData, setUserData] = useState([])
 
-    async function onRefresh() {
+     function onRefresh() {
 
         /*Update User Data*/
-        await firebase.database().ref('users/').once('value', snapshot => {
+         firebase.database().ref('users/').once('value', snapshot => {
             const toUserData = []
             let toUserDataDotGuesses = []
             snapshot.forEach(user => {
