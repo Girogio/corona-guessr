@@ -44,7 +44,11 @@ export default function DashboardScreen({navigation}) {
 
         const now = new Date()
         const predictionUpdate = setInterval(() => {
-            setRemainingTime().then({})
+            setRemainingTime().then(() => {
+                if (remaining.hours === 0 && remaining.minutes === 0 && remaining.seconds === 1) {
+                    userData.hasGuessed = false;
+                }
+            })
         }, 1000)
 
         const path = '/guesses/' + (now.getDate() + 1 < 10 ? '0' + now.getDate() + 1 : (now.getDate() + 1)) + '-' + ((now.getMonth() + 1) < 10 ? '0' + (now.getMonth() + 1) : (now.getMonth() + 1)) + '-' + now.getFullYear()
