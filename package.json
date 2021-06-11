@@ -60,6 +60,7 @@
     "expo-task-manager": "^9.1.0",
     "react-beautiful-switch": "^1.0.2",
     "react-native-gradient-buttons": "^2.0.2",
+    "react-native-responsive-screen": "^1.4.2",
     "react-native-switch-toggle": "^2.1.1",
     "react-native-video": "^5.1.1"
   },
