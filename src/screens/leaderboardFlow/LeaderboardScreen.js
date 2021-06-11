@@ -3,30 +3,36 @@ import {FlatList, Image, StatusBar, Text, TouchableOpacity, View} from "react-na
 import MyStyles from "../../../assets/styles/MyStyles";
 import {Header} from "react-native-elements";
 import Colors from "../../../assets/colors/Colors";
-import leaderboardData from "../../../assets/data/leaderboardData";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import firebase from 'firebase/app'
 import 'firebase/database'
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp,
+} from 'react-native-responsive-screen'
 
-const rerenderLeaderboardItem = ({item}) => {
+import Icon from "react-native-vector-icons/Ionicons";
+
+const renderLeaderboardItem = ({item}) => {
     return (
         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 25}}>
             {/*Ranking*/}
-            <View style={{alignItems: 'center', justifyContent: 'center', marginRight: 10}}>
-                <Text style={{color: 'white', marginBottom: -13}}> {item.position} </Text>
-                <MaterialIcon
+            <View style={{alignItems: 'center', paddingRight: 13, justifyContent: 'center',}}>
+                <Text style={{color: 'white'}}> {item.position} </Text>
+                {/*<MaterialIcon
                     name={item.hasIncreased ? 'arrow-drop-up' : 'arrow-drop-down'}
                     color={item.hasIncreased ? 'green' : 'red'}
                     size={40}
-                />
+                />*/}
             </View>
             {/*Main content*/}
             <View style={{
-                backgroundColor: '#252525',
+                backgroundColor: Colors.lighterBackground,
                 alignItems: 'center',
-                width: '85%',
+                width: wp('85%'),
                 flexDirection: 'row',
                 padding: 10,
+                alignSelf: 'center',
                 justifyContent: 'space-between',
                 borderRadius: 30
             }}>
@@ -36,9 +42,9 @@ const rerenderLeaderboardItem = ({item}) => {
                         style={{
                             width: 58,
                             height: 58,
-                            borderRadius: 30
+                            borderRadius: 29
                         }}
-                        source={item.image}/>
+                        source={require('../../../assets/images/justin.jpg')}/>
                     <Text style={{color: 'white', marginLeft: 8}}> {item.name}</Text>
                 </View>
 
@@ -48,13 +54,10 @@ const rerenderLeaderboardItem = ({item}) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginTop: 7,
-                    paddingLeft: 12,
-                    marginLeft: 48,
-                    paddingRight: 12,
-                    marginRight: 12,
-                    paddingTop: 3,
-                    paddingBottom: 3,
-                    borderRadius: 50
+                    marginRight: 10,
+                    paddingHorizontal: 12,
+                    paddingVertical: 3,
+                    borderRadius: 50,
                 }}>
                     <Text style={{color: '#19D4F8', fontSize: 10}}>{
                         item.points} points
@@ -69,12 +72,11 @@ export default function LeaderboardScreen() {
 
     const [caseStatistics, setCaseStatistics] = useState([])
     const [userData, setUserData] = useState([])
-    const [isFetching, setIsFetching] = useState(true)
 
-    function onRefresh() {
-        setIsFetching(true)
+    async function onRefresh() {
+
         /*Update User Data*/
-        firebase.database().ref('users/').on('value', snapshot => {
+        await firebase.database().ref('users/').once('value', snapshot => {
             const toUserData = []
             let toUserDataDotGuesses = []
             snapshot.forEach(user => {
@@ -137,7 +139,6 @@ export default function LeaderboardScreen() {
             /// if (user.score)
             firebase.database().ref('users/' + user.uid + '/score/position').set((userData.indexOf((user)) + 1))
         })
-        setIsFetching(false)
     }
 
 
@@ -146,14 +147,41 @@ export default function LeaderboardScreen() {
     }, [])
 
     return (
-        <View style={[MyStyles.container, {paddingTop: StatusBar.currentHeight, justifyItems: 'center'}]}>
+        <View style={[MyStyles.container, {
+            paddingTop: StatusBar.currentHeight,
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+        }]}>
+            <StatusBar style="light"/>
+            <Header backgroundColor={Colors.darkBackground}
+                    centerContainerStyle={[MyStyles.mainHeaderCenterContainer, {
+                        paddingTop: 0,
+                        justifyContent: 'center'
+                    }]}
+                    rightComponent={
+                        <TouchableOpacity onPress={() => onRefresh()}>
+                            <Icon name={'reload'} style={{color: 'white', paddingRight: 10}}
+                                  size={30}/>
+                        </TouchableOpacity>
+                    }
+                    containerStyle={{
+                        borderBottomWidth: 0,
+                        paddingBottom: 50,
+                    }}
+                    centerComponent={
+                        <TouchableOpacity
+                            onPress={() => {
+                            }}>
+                            <Text style={MyStyles.mainHeaderText}>LEADERBOARD</Text>
+                        </TouchableOpacity>
+                    }
+            />
             <FlatList
                 data={userData.sort((a, b) => {
                     return a.position - b.position;
                 })}
-                renderItem={rerenderLeaderboardItem}
-                onRefresh={() => onRefresh()}
-                refreshing={isFetching}
+                renderItem={renderLeaderboardItem}
                 keyExtractor={item => item.uid}
             />
         </View>
@@ -166,21 +194,6 @@ class Main extends Component {
     render() {
         return (
             <View style={MyStyles.container}>
-                <StatusBar style="light"/>
-                <Header backgroundColor={Colors.darkBackground}
-                        centerContainerStyle={MyStyles.mainHeaderCenterContainer}
-                        centerComponent={
-                            <TouchableOpacity
-                                onPress={() => {
-
-                                    this.flatListRef.scrollToIndex({animated: true, index: 0})
-                                }}>
-                                <Text style={MyStyles.mainHeaderText}>LEADERBOARD</Text>
-                            </TouchableOpacity>
-                        }
-                        containerStyle={MyStyles.mainHeaderContainer}
-                />
-
                 {/*<View style={{
                     alignItems: 'flex-end',
                     flexDirection: 'row',

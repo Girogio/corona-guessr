@@ -5,7 +5,10 @@ import Colors from "../../../assets/colors/Colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import MyStyles from "../../../assets/styles/MyStyles";
 import firebase from "firebase";
-
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp,
+} from 'react-native-responsive-screen'
 
 function renderItem({item}) {
 
@@ -16,11 +19,11 @@ function renderItem({item}) {
             backgroundColor: '#252525',
             alignSelf: 'center',
             flexDirection: 'row',
-            paddingVertical: 10,
+            paddingVertical: 17,
             marginBottom: 20,
             alignItems: 'center',
             justifyContent: 'space-between',
-            width: '75%',
+            width: wp('85%'),
             borderRadius: 30
         }}>
             {/*Profile stuff*/}
@@ -51,8 +54,8 @@ function renderItem({item}) {
                 borderRadius: 50,
                 paddingLeft: 16,
                 paddingRight: 16,
-                paddingTop: 6,
-                paddingBottom: 6,
+                paddingTop: 5,
+                paddingBottom: 3,
                 marginRight: 24
             }}>
                 <Text style={{
@@ -60,7 +63,7 @@ function renderItem({item}) {
                     fontFamily: 'Poppins-SemiBold',
                     fontSize: 10,
                 }}>
-                    {item.hasGuessed ? 'Predicted: ' + item.guess : 'N/A'}
+                    {item.hasGuessed ? 'Predicted: ' + item.guess : 'No data: N/A'}
                 </Text>
             </View>
         </View>
