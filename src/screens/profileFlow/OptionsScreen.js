@@ -1,11 +1,15 @@
 import React, {useEffect, useState} from "react";
+import SwitchToggle from 'react-native-switch-toggle'
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import MyStyles from "../../../assets/styles/MyStyles";
 import Colors from "../../../assets/colors/Colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import {Header} from "react-native-elements";
-import SwitchToggle from "react-native-switch-toggle";
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp,
+} from 'react-native-responsive-screen'
 import firebase from "firebase/app";
 import "firebase/auth"
 
@@ -47,8 +51,6 @@ export default function OptionsScreen({navigation}) {
                             <Icon name={'ios-chevron-back'} size={30} color={'white'} style={{paddingLeft: 35}}/>
                         </TouchableOpacity>
                     }
-                    leftContainerStyle={MyStyles.mainHeaderLeftContainer}
-                    centerContainerStyle={MyStyles.mainHeaderCenterContainer}
                     centerComponent={<Text style={MyStyles.mainHeaderText}>SETTINGS</Text>}
                     containerStyle={MyStyles.mainHeaderContainer}
             />
