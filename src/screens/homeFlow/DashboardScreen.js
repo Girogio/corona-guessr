@@ -105,11 +105,9 @@ export default function DashboardScreen({navigation}) {
                 <Text style={styles.nameText}> {userData.displayName.split(" ")[0]}</Text>.
             </Text>
             <Image style={styles.maltaImage} source={require('../../../assets/images/MALTA.png')}/>
-            {/*Button 1*/}
             <View style={{marginTop: 50, flexDirection: 'row'}}>
                 {/*Button 1*/}
                 <TouchableNativeFeedback
-
                     onPress={() => userData.hasGuessed ? null : navigation.navigate('SubmitPrediction')}>
                     <View style={styles.leftButtonContainer}>
                         <Text style={styles.buttonTitleText}>Your{'\n'}Prediction</Text>
