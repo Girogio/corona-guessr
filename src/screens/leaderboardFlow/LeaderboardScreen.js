@@ -27,7 +27,7 @@ const renderLeaderboardItem = ({item}) => {
             </View>
             {/*Main content*/}
             <View style={{
-                backgroundColor: Colors.lighterBackground,
+                backgroundColor: item.uid === firebase.auth().currentUser.uid ? '#18647C' : Colors.lighterBackground,
                 alignItems: 'center',
                 width: wp('85%'),
                 flexDirection: 'row',
@@ -73,10 +73,10 @@ export default function LeaderboardScreen() {
     const [caseStatistics, setCaseStatistics] = useState([])
     const [userData, setUserData] = useState([])
 
-     function onRefresh() {
+    function onRefresh() {
 
         /*Update User Data*/
-         firebase.database().ref('users/').once('value', snapshot => {
+        firebase.database().ref('users/').once('value', snapshot => {
             const toUserData = []
             let toUserDataDotGuesses = []
             snapshot.forEach(user => {
@@ -161,7 +161,7 @@ export default function LeaderboardScreen() {
                     }]}
                     rightComponent={
                         <TouchableOpacity onPress={() => onRefresh()}>
-                            <Icon name={'reload'} style={{color: 'white', paddingRight: 10}}
+                            <Icon name={'reload'} style={{color: 'white', paddingRight: 20}}
                                   size={30}/>
                         </TouchableOpacity>
                     }

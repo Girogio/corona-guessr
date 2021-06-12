@@ -16,7 +16,7 @@ function renderItem({item}) {
     const BadgedIcon = (Icon)
     return (
         <View style={{
-            backgroundColor: '#252525',
+            backgroundColor: item.uid === firebase.auth().currentUser.uid ? '#18647C' : '#252525',
             alignSelf: 'center',
             flexDirection: 'row',
             paddingVertical: 17,
@@ -79,13 +79,13 @@ export default function TodaysPredictionScreen({navigation}) {
             .ref('users/')
             .on('value', snapshot => {
                 const toPredictions = []
-                const path = '/guesses/' + (now.getDate() + 1 < 10 ? '0' + now.getDate() + 1 : (now.getDate() + 1)) + '-' + ((now.getMonth() + 1) < 10 ? '0' + (now.getMonth() + 1) : (now.getMonth() + 1)) + '-' + now.getFullYear()
+                const tomorrow = '/guesses/' + (now.getDate() + 1 < 10 ? '0' + now.getDate() + 1 : (now.getDate() + 1)) + '-' + ((now.getMonth() + 1) < 10 ? '0' + (now.getMonth() + 1) : (now.getMonth() + 1)) + '-' + now.getFullYear()
                 snapshot.forEach(user => {
                     toPredictions.push({
                         uid: user.key,
                         name: user.val().displayName,
-                        guess: user.child(path + '/guess').val(),
-                        hasGuessed: user.child(path + '/hasGuessed').val() !== null,
+                        guess: user.child(tomorrow + '/guess').val(),
+                        hasGuessed: user.child(tomorrow + '/hasGuessed').val() !== null,
                     })
                 })
                 setAllPredictions(toPredictions)
