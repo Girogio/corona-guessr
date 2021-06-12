@@ -4,7 +4,7 @@ import {
     Alert,
     FlatList,
     Image, Linking,
-    Platform,
+    Platform, SafeAreaView,
     StyleSheet,
     Text,
     TouchableNativeFeedback,
@@ -13,6 +13,10 @@ import {
 } from "react-native";
 import {Header} from "react-native-elements";
 import Colors from "../../../assets/colors/Colors";
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp,
+} from 'react-native-responsive-screen'
 import Icon from "react-native-vector-icons/Ionicons";
 import MyStyles from "../../../assets/styles/MyStyles";
 import firebase from "firebase/app";
@@ -92,21 +96,19 @@ export default function ProfileScreen({navigation}) {
 
     //console.log(userData)
     return (
-        <View style={MyStyles.container}>
+        <SafeAreaView style={MyStyles.container}>
             <Header backgroundColor={Colors.darkBackground}
                     rightComponent={
                         <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-                            <Icon name={'settings-outline'} size={30} color={'white'}/>
+                            <Icon style={{marginRight: wp('3%'), paddingTop: hp('2%')}} name={'settings-outline'}
+                                  size={30} color={'white'}/>
                         </TouchableOpacity>
                     }
                     centerComponent={
-                        <Text style={MyStyles.mainHeaderText}>PROFILE</Text>
+                        <Text style={[MyStyles.mainHeaderText, {marginTop: 20}]}>PROFILE</Text>
                     }
 
                     containerStyle={MyStyles.mainHeaderContainer}
-                    rightContainerStyle={{marginRight: 20}}
-
-                    centerContainerStyle={MyStyles.mainHeaderCenterContainer}
             />
             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                 <View>
@@ -149,7 +151,7 @@ export default function ProfileScreen({navigation}) {
                     keyExtractor={(item) => item.id}
                 />
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
