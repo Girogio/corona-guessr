@@ -31,7 +31,7 @@ const MyStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderBottomWidth: 0,
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 21,
+        paddingTop: Platform.OS === 'android' ? 0: 0,
     },
     mainHeaderText: {
         color: 'white',
@@ -39,12 +39,6 @@ const MyStyles = StyleSheet.create({
         fontFamily: 'ProximaNova-Bold',
         fontSize: 21,
     },
-    mainHeaderLeftContainer: {
-        marginLeft: -20
-    },
-    mainHeaderCenterContainer: {
-        marginLeft: 20,
-        paddingTop: 10
-    }
+
 })
 export default MyStyles;
