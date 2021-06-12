@@ -30,12 +30,10 @@ export const addProfile = (name, email, password) => new Promise((resolve, rejec
                 email: email,
                 displayName: name,
                 rank: 'Wandering Guesser',
-                points: 0,
+                score: {points: 0},
             })
         })
-
-});
-
+})
 export default function RegisterScreen({navigation}) {
     const [fullNameFocus, setFullNameFocusState] = useState(false);
     const fullNameFocusStyle = fullNameFocus ? textBoxStyles.textInputFocus : textBoxStyles.textInputBlurred;
