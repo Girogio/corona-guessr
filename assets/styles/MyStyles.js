@@ -1,5 +1,9 @@
 import {Platform, StatusBar, StyleSheet} from "react-native";
 import Colors from "../colors/Colors";
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp,
+} from 'react-native-responsive-screen'
 
 const MyStyles = StyleSheet.create({
     container: {
@@ -30,8 +34,8 @@ const MyStyles = StyleSheet.create({
         backgroundColor: Colors.darkBackground,
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: hp('2%'),
         borderBottomWidth: 0,
-        paddingTop: Platform.OS === 'android' ? 0: 0,
     },
     mainHeaderText: {
         color: 'white',
