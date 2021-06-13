@@ -148,34 +148,23 @@ export default function LeaderboardScreen() {
 
     return (
         <View style={[MyStyles.container, {
-            paddingTop: StatusBar.currentHeight,
             width: '100%',
             justifyContent: 'space-between',
             alignItems: 'center'
         }]}>
             <StatusBar style="light"/>
             <Header backgroundColor={Colors.darkBackground}
-                    centerContainerStyle={[MyStyles.mainHeaderCenterContainer, {
-                        paddingTop: 0,
-                        justifyContent: 'center'
-                    }]}
                     rightComponent={
                         <TouchableOpacity onPress={() => onRefresh()}>
-                            <Icon name={'reload'} style={{color: 'white', paddingRight: 20}}
-                                  size={30}/>
+                            <Icon name={'reload'} style={{marginRight: wp('6%')}}
+                                  size={30} color={'white'}/>
                         </TouchableOpacity>
                     }
-                    containerStyle={{
-                        borderBottomWidth: 0,
-                        paddingBottom: 50,
-                    }}
                     centerComponent={
-                        <TouchableOpacity
-                            onPress={() => {
-                            }}>
-                            <Text style={MyStyles.mainHeaderText}>LEADERBOARD</Text>
-                        </TouchableOpacity>
+                        <Text style={MyStyles.mainHeaderText}>LEADERBOARD</Text>
                     }
+
+                    containerStyle={[MyStyles.mainHeaderContainer, {paddingBottom: 40}]}
             />
             <FlatList
                 data={userData.sort((a, b) => {
