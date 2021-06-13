@@ -182,7 +182,7 @@ export default function App() {
     function PreMainStack() {
         return (
             <preMainStack.Navigator
-                initialRouteName={true ? 'Tutorial' : 'MainStack'}
+                initialRouteName={firstTime === 'true' ? 'Tutorial' : 'MainStack'}
                 screenOptions={{
                     headerShown: false,
                 }}>
