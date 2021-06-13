@@ -95,10 +95,11 @@ export default function DashboardScreen({navigation}) {
         <View style={MyStyles.container}>
             <StatusBar style="light"/>
             <Header backgroundColor={Colors.darkBackground}
-                    centerContainerStyle={MyStyles.mainHeaderCenterContainer}
+                    centerComponent={
+                        <Text style={MyStyles.mainHeaderText}>DASHBOARD</Text>
+                    }
 
-                    centerComponent={<Text style={MyStyles.mainHeaderText}>DASHBOARD</Text>}
-                    containerStyle={MyStyles.mainHeaderContainer}
+                    containerStyle={[MyStyles.mainHeaderContainer, {paddingBottom: 0}]}
             />
 
             <Text style={styles.subtitle}>Welcome back,
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
         paddingTop: 23,
         color: 'white',
         letterSpacing: 0.2,
-        fontFamily: 'Georgia-Bold',
+        fontFamily: 'Poppins-Regular',
         fontSize: 21,
     },
     nameText: {
