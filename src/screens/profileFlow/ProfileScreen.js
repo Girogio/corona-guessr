@@ -81,7 +81,7 @@ export default function ProfileScreen({navigation}) {
     function renderAchievementItem({item}) {
         return (
             <TouchableNativeFeedback>
-                <View style={styles.leftButtonContainer}>
+                <View style={[styles.leftButtonContainer]}>
                     <Text style={styles.buttonTitleText}>{item.title}</Text>
                     <View style={styles.buttonStatusContainer}>
                         <Icon color='white' size={22} name={item.icon}/>
@@ -100,19 +100,20 @@ export default function ProfileScreen({navigation}) {
             <Header backgroundColor={Colors.darkBackground}
                     rightComponent={
                         <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-                            <Icon style={{marginRight: wp('3%'), paddingTop: hp('2%')}} name={'settings-outline'}
+                            <Icon name={'settings-outline'} style={{marginRight: wp('6%')}}
                                   size={30} color={'white'}/>
                         </TouchableOpacity>
                     }
                     centerComponent={
-                        <Text style={[MyStyles.mainHeaderText, {marginTop: 20}]}>PROFILE</Text>
+                        <Text style={MyStyles.mainHeaderText}>PROFILE</Text>
                     }
 
                     containerStyle={MyStyles.mainHeaderContainer}
             />
             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                 <View>
-                    {image && <Image source={{uri: image}} style={{
+                    {/* {image && <Image source={{uri: image}} style={{*/}
+                    {<Image source={require('../../../assets/images/giorgio.jpg')} style={{
                         width: 120,
                         height: 120,
                         borderRadius: 60,
@@ -144,10 +145,12 @@ export default function ProfileScreen({navigation}) {
             </View>
             <View style={{alignSelf: 'flex-start', paddingLeft: 30, paddingTop: 30}}>
                 <Text style={{fontFamily: 'Poppins-SemiBold', color: 'white', fontSize: 24}}>Achievements</Text>
-
+            </View>
+            <View style={{alignSelf: 'center'}}>
                 <FlatList
                     data={Achievements}
                     renderItem={renderAchievementItem}
+                    numColumns={2}
                     keyExtractor={(item) => item.id}
                 />
             </View>
@@ -159,8 +162,8 @@ const styles = StyleSheet.create({
     leftButtonContainer: {
         width: 160,
         height: 170,
-        paddingLeft: 12,
-        paddingRight: 12,
+        margin: 10,
+        paddingHorizontal: 12,
         backgroundColor: '#252525',
         borderRadius: 24
     },

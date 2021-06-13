@@ -16,6 +16,7 @@ export default function OnBoardingScreen({navigation}) {
         try {
             await AsyncStorage.setItem('@first_timer', 'false');
         } catch (error) {
+
         }
         navigation.navigate('MainStack')
     };
@@ -27,6 +28,7 @@ export default function OnBoardingScreen({navigation}) {
                 onDone={() => {
                     storeData().then(() => console.log('done'))
                 }}
+                skipLabel={false}
                 pages={
                     [
                         {
