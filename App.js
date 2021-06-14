@@ -230,12 +230,10 @@ export default function App() {
 
     let [fontsLoaded] = useFonts({
         'SFPro-Light': require('./assets/fonts/SFPro-Light.ttf'),
-        'ProximaNova-Bold': require('./assets/fonts/ProximaNova-Bold.ttf'),
-        'ProximaNova-Regular': require('./assets/fonts/ProximaNova-Regular.ttf'),
-        'ProximaNova-SemiBold': require('./assets/fonts/ProximaNova-SemiBold.otf'),
         'Georgia-Regular': require('./assets/fonts/Georgia-Regular.ttf'),
         'Georgia-Bold': require('./assets/fonts/Georgia-Bold.ttf'),
         'Poppins-SemiBold': require('./assets/fonts/Poppins-SemiBold.ttf'),
+        'Poppins-Medium': require('./assets/fonts/Poppins-Medium.ttf'),
         'Poppins-Regular': require('./assets/fonts/Poppins-Regular.ttf')
     });
 

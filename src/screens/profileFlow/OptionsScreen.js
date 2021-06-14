@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
         height: '83%'
     },
     entryTitle: {
-        fontFamily: 'ProximaNova-Bold',
+        fontFamily: 'Poppins-SemiBold',
         color: 'white',
         fontSize: 20,
         marginTop: 20,
@@ -165,11 +165,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingTop: 18
+        paddingTop: 15
     },
     entrySubtitleText: {
-        fontFamily: 'ProximaNova-SemiBold',
-        fontSize: 18,
+        fontFamily: 'Poppins-Medium',
+        fontSize: 15,
         color: '#ADADAD'
     },
     divider: {

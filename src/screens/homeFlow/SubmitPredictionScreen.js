@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     titleText: {
         marginTop: 17,
         color: 'white',
-        fontFamily: 'ProximaNova-Bold',
+        fontFamily: 'Poppins-SemiBold',
         fontSize: 25,
         textAlign: 'center'
     },

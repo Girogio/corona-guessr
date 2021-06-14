@@ -102,14 +102,12 @@ export default function TodaysPredictionScreen({navigation}) {
                             <Icon name={'ios-chevron-back'} size={30} color={'white'} style={{paddingLeft: 35}}/>
                         </TouchableOpacity>
                     }
-                    leftContainerStyle={MyStyles.mainHeaderLeftContainer}
                     centerComponent={
                         <Text style={MyStyles.mainHeaderText}>TODAY'S PREDICTIONS</Text>
                     }
-                    containerStyle={[MyStyles.mainHeaderContainer, {paddingBottom: 30}]}
-                    centerContainerStyle={MyStyles.mainHeaderCenterContainer}
+                    containerStyle={[MyStyles.mainHeaderContainer]}
             />
-            <View style={{alignItems: 'center', justifyContent: 'flex-start'}}>
+            <View style={{alignItems: 'center', justifyItems: 'center'}}>
                 <FlatList
                     data={allPredictions.sort((a, b) => b.hasGuessed - a.hasGuessed)}
                     renderItem={renderItem}

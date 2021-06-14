@@ -110,7 +110,7 @@ export default function DashboardScreen({navigation}) {
                 {/*Button 1*/}
                 <TouchableNativeFeedback
                     disabled={userData.hasGuessed}
-                    onPress={() => userData.hasGuessed ? null : () => navigation.navigate('SubmitPrediction')}>
+                    onPress={userData.hasGuessed ? null : () => navigation.navigate('SubmitPrediction')}>
                     <View style={styles.leftButtonContainer}>
                         <Text style={styles.buttonTitleText}>Your{'\n'}Prediction</Text>
                         <View style={styles.buttonStatusContainer}>

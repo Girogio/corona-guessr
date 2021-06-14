@@ -46,7 +46,7 @@ const renderLeaderboardItem = ({item}) => {
                             borderRadius: 29
                         }}
                         source={require('../../../assets/images/justin.jpg')}/>
-                    <Text style={{color: 'white', marginLeft: 8}}> {item.name}</Text>
+                    <Text style={{color: 'white', marginLeft: 8, fontFamily: 'Poppins-SemiBold'}}> {item.name}</Text>
                 </View>
 
                 {/*Point indicator*/}
@@ -54,7 +54,6 @@ const renderLeaderboardItem = ({item}) => {
                     backgroundColor: '#000',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginTop: 7,
                     marginRight: 10,
                     paddingHorizontal: 12,
                     paddingVertical: 3,
