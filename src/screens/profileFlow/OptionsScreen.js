@@ -14,8 +14,8 @@ import firebase from "firebase/app";
 import "firebase/auth"
 
 
-function logOut(navigation) {
-    firebase.auth().signOut().then();
+function logOut() {
+   firebase.auth().signOut().then();
 }
 
 export default function OptionsScreen({navigation}) {
@@ -29,7 +29,7 @@ export default function OptionsScreen({navigation}) {
     useEffect(() => {
         try {
             firebase.database()
-                .ref('users/' + firebase.auth().currentUser.uid)
+                .ref('users/' + firebase.auth().currentUser?.uid)
                 .on('value', snapshot => {
                     const userStuff = {
                         date_created: snapshot.val().date_created,
@@ -135,10 +135,10 @@ export default function OptionsScreen({navigation}) {
                 </View>
 
                 <View style={styles.entrySubtitleContainer}>
-                    <TouchableOpacity onPress={logOut(navigation)}>
+                    <TouchableOpacity onPress={() => logOut(navigation)}>
                         <Text style={[styles.entrySubtitleText, {color: '#FF4b3a'}]}>Sign out</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={logOut(navigation)}>
+                    <TouchableOpacity onPress={() => logOut(navigation)}>
                         <MaterialIcon color={'#FF4b3a'} name={'chevron-right'} size={25}/>
                     </TouchableOpacity>
                 </View>
