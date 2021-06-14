@@ -43,14 +43,14 @@ export default function DashboardScreen({navigation}) {
     useEffect(() => {
 
         const now = new Date()
-        const predictionUpdate = setInterval(() => {
-            setRemainingTime().then(() => {
-                if (remaining.hours === 0 && remaining.minutes === 0 && remaining.seconds === 1) {
-                    userData.hasGuessed = false;
-                }
-            })
-        }, 1000)
 
+        let predictionUpdate = setInterval(() => {
+            setRemainingTime().then(() => {
+                firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value').then(snapshot => {
+                    userData.hasGuessed = snapshot.child(path + '/hasGuessed').val() !== null;
+                })
+            }, 1000)
+        });
         const path = '/guesses/' + (now.getDate() + 1 < 10 ? '0' + now.getDate() + 1 : (now.getDate() + 1)) + '-' + ((now.getMonth() + 1) < 10 ? '0' + (now.getMonth() + 1) : (now.getMonth() + 1)) + '-' + now.getFullYear()
 
         firebase.database()
@@ -137,7 +137,9 @@ export default function DashboardScreen({navigation}) {
                         </View>
                         <View style={styles.buttonStatusContainer}>
                             <Icon color='white' size={22} name={'people-outline'}/>
-                            <Text style={styles.buttonStatusText}></Text>
+                            {/*
+                         <Text style={styles.buttonStatusText}></Text>
+                            */}
                         </View>
                         <View style={styles.divider}/>
                         <Text style={styles.buttonStatusText}>See what others{'\n'}predicted .</Text>
