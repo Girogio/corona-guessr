@@ -5,7 +5,7 @@ import {Header} from "react-native-elements";
 import Colors from "../../../assets/colors/Colors";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import firebase from 'firebase/app'
-import Toast from "react-native-fast-toast";
+import Toast, {BaseToast} from 'react-native-toast-message';
 import 'firebase/database'
 import {
     heightPercentageToDP as hp,
@@ -69,6 +69,7 @@ const renderLeaderboardItem = ({item}) => {
     )
 }
 
+
 export default function LeaderboardScreen() {
 
     const [caseStatistics, setCaseStatistics] = useState([])
@@ -76,8 +77,6 @@ export default function LeaderboardScreen() {
     const toast = useRef(null);
 
     function onRefresh() {
-        toast.current.show("Task finished successfully");
-
         /*Update User Data*/
         firebase.database().ref('users/').once('value', snapshot => {
             const toUserData = []
@@ -100,6 +99,19 @@ export default function LeaderboardScreen() {
                 toUserDataDotGuesses = []
             })
             setUserData(toUserData)
+            toast.current.show({
+                type: 'success',
+                text1: 'Refresh successful!',
+                text2: 'Leaderboard is now up to date!',
+                position: 'bottom',
+                visibilityTime: 3000,
+                bottomOffset: 10,
+                props: {
+                    guid: 'guid-id', onPress: () => {
+                    }
+                }
+            });
+
         })
 
         /*Update Statistics*/
@@ -177,7 +189,6 @@ export default function LeaderboardScreen() {
                 keyExtractor={item => item.uid}
             />
             <Toast ref={toast}/>
-
         </View>
     )
 }
