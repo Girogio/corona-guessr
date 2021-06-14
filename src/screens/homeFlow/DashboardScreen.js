@@ -46,7 +46,7 @@ export default function DashboardScreen({navigation}) {
 
         let predictionUpdate = setInterval(() => {
             setRemainingTime().then(() => {
-                firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value').then(snapshot => {
+                firebase.database().ref('users/' + firebase.auth().currentUser?.uid).once('value').then(snapshot => {
                     userData.hasGuessed = snapshot.child(path + '/hasGuessed').val() !== null;
                 })
             }, 1000)
@@ -54,7 +54,7 @@ export default function DashboardScreen({navigation}) {
         const path = '/guesses/' + (now.getDate() + 1 < 10 ? '0' + now.getDate() + 1 : (now.getDate() + 1)) + '-' + ((now.getMonth() + 1) < 10 ? '0' + (now.getMonth() + 1) : (now.getMonth() + 1)) + '-' + now.getFullYear()
 
         firebase.database()
-            .ref('users/' + firebase.auth().currentUser.uid)
+            .ref('users/' + firebase.auth().currentUser?.uid)
             .on('value', snapshot => {
                 const userStuff = {
                     date_created: snapshot.val().date_created,
