@@ -98,18 +98,7 @@ export default function LeaderboardScreen() {
                 toUserDataDotGuesses = []
             })
             setUserData(toUserData)
-            toast.current.show({
-                type: 'success',
-                text1: 'Refresh successful!',
-                text2: 'Leaderboard is now up to date!',
-                position: 'bottom',
-                visibilityTime: 3000,
-                bottomOffset: 10,
-                props: {
-                    guid: 'guid-id', onPress: () => {
-                    }
-                }
-            });
+
 
         })
 
@@ -169,7 +158,21 @@ export default function LeaderboardScreen() {
             <StatusBar style="light"/>
             <Header backgroundColor={Colors.darkBackground}
                     rightComponent={
-                        <TouchableOpacity onPress={() => onRefresh()}>
+                        <TouchableOpacity onPress={() => {
+                            onRefresh()
+                            toast.current.show({
+                                type: 'success',
+                                text1: 'Refresh successful!',
+                                text2: 'Leaderboard is now up to date!',
+                                position: 'bottom',
+                                visibilityTime: 3000,
+                                bottomOffset: 10,
+                                props: {
+                                    guid: 'guid-id', onPress: () => {
+                                    }
+                                }
+                            });
+                        }}>
                             <Icon name={'reload'} style={{marginRight: wp('6%')}}
                                   size={30} color={'white'}/>
                         </TouchableOpacity>
