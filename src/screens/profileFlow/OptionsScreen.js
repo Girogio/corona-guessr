@@ -14,8 +14,8 @@ import firebase from "firebase/app";
 import "firebase/auth"
 
 
-function logOut() {
-    firebase.auth().signOut().then(console.log('Signed Out'));
+function logOut(navigation) {
+    firebase.auth().signOut().then();
 }
 
 export default function OptionsScreen({navigation}) {
@@ -27,18 +27,21 @@ export default function OptionsScreen({navigation}) {
     });
 
     useEffect(() => {
-        firebase.database()
-            .ref('users/' + firebase.auth().currentUser.uid)
-            .on('value', snapshot => {
-                const userStuff = {
-                    date_created: snapshot.val().date_created,
-                    displayName: snapshot.val().displayName,
-                    email: snapshot.val().email,
-                    rank: snapshot.val().rank,
-                    achievements: snapshot.val().achievements
-                }
-                setUserData(userStuff)
-            });
+        try {
+            firebase.database()
+                .ref('users/' + firebase.auth().currentUser.uid)
+                .on('value', snapshot => {
+                    const userStuff = {
+                        date_created: snapshot.val().date_created,
+                        displayName: snapshot.val().displayName,
+                        email: snapshot.val().email,
+                        rank: snapshot.val().rank,
+                        achievements: snapshot.val().achievements
+                    }
+                    setUserData(userStuff)
+                });
+        } catch (err) {
+        }
     }, [])
 
     const [on, isON] = useState(false)
@@ -59,7 +62,7 @@ export default function OptionsScreen({navigation}) {
                 <View style={{flexDirection: 'row', marginTop: 19, alignItems: 'center'}}>
                     <Image style={{borderRadius: 110, height: 55, width: 55}}
                            source={require('../../../assets/images/robert.jpg')}/>
-                    <Text style={{fontFamily: 'ProximaNova-Bold', fontSize: 18, marginLeft: 16, color: 'white'}}>
+                    <Text style={{fontFamily: 'Poppins-SemiBold', fontSize: 18, marginLeft: 16, color: 'white'}}>
                         {userData.displayName}
                     </Text>
                 </View>
@@ -132,10 +135,10 @@ export default function OptionsScreen({navigation}) {
                 </View>
 
                 <View style={styles.entrySubtitleContainer}>
-                    <TouchableOpacity onPress={logOut}>
+                    <TouchableOpacity onPress={logOut(navigation)}>
                         <Text style={[styles.entrySubtitleText, {color: '#FF4b3a'}]}>Sign out</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={logOut}>
+                    <TouchableOpacity onPress={logOut(navigation)}>
                         <MaterialIcon color={'#FF4b3a'} name={'chevron-right'} size={25}/>
                     </TouchableOpacity>
                 </View>

@@ -92,7 +92,7 @@ const LoginScreen = ({navigation}) => {
                         secureTextEntry={true}
                     />
                     <GradientButton
-                        style={{marginVertical: 8, marginTop: 37, fontFamily: 'ProximaNova-Bold'}}
+                        style={{marginVertical: 8, marginTop: 37, fontFamily: 'Poppins-SemiBold'}}
                         text="LOG IN"
                         textStyle={{fontSize: 15, lineHeight: 18}}
                         gradientBegin="#01B6FC"
@@ -115,7 +115,7 @@ const LoginScreen = ({navigation}) => {
                         </View>
                         <View style={{flex: 1, height: 1, backgroundColor: 'white'}}/>
                     </View>
-                    <Text style={{color: 'white', fontFamily: 'ProximaNova-Bold', marginTop: 10}}>
+                    <Text style={{color: 'white', fontFamily: 'Poppins-SemiBold', marginTop: 10}}>
                         Sign in with:
                     </Text>
                     <View style={styles.socialLoginContainer}>
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     titleText: {
         fontSize: 30,
         color: '#fff',
-        fontFamily: 'ProximaNova-Bold'
+        fontFamily: 'Poppins-SemiBold'
     },
     subTitle: {
         color: 'gray',
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     forgotPasswordText: {
         color: '#01B3FE',
         paddingTop: 20,
-        fontFamily: 'ProximaNova-Bold'
+        fontFamily: 'Poppins-SemiBold'
     },
     orContainer: {
         flexDirection: 'row'
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'white',
         fontSize: 20,
-        fontFamily: 'ProximaNova-Bold',
+        fontFamily: 'Poppins-SemiBold',
     },
     socialLoginContainer: {
         flexDirection: 'row',

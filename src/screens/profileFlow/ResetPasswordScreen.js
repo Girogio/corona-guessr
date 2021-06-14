@@ -70,9 +70,9 @@ const ResetPasswordScreen = ({navigation}) => {
                         keyboardType={'email-address'}
                     />
                     <GradientButton
-                        style={{marginVertical: 8, marginTop: 37, fontFamily: 'ProximaNova-Bold'}}
+                        style={{marginVertical: 8, marginTop: 37, fontFamily: 'Poppins-SemiBold'}}
                         text="RESET PASSWORD"
-                        textStyle={{fontSize: 15, fontFamily: 'ProximaNova-Bold'}}
+                        textStyle={{fontSize: 15, fontFamily: 'Poppins-SemiBold'}}
                         gradientBegin="#01B6FC"
                         gradientEnd='#26E3F6'
                         gradientDirection='vertical'
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         letterSpacing: 0.18,
-        fontFamily: 'ProximaNova-Bold'
+        fontFamily: 'Poppins-SemiBold'
     },
     subTitle: {
         color: 'gray',

@@ -63,7 +63,7 @@ export default function SubmitPredictionScreen({navigation}) {
                     placeholderTextColor={'gray'}
                 />
                 <GradientButton
-                    style={{marginVertical: 8, marginTop: 37, fontFamily: 'ProximaNova-Bold'}}
+                    style={{marginVertical: 8, marginTop: 37, fontFamily: 'Poppins-SemiBold'}}
                     text="SUBMIT"
                     textStyle={{fontSize: 15, lineHeight: 18}}
                     gradientBegin="#01B6FC"

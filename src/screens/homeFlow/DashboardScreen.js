@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'white',
-        fontFamily: 'ProximaNova-Bold',
+        fontFamily: 'Poppins-SemiBold',
         fontSize: 21,
     },
     subtitle: {

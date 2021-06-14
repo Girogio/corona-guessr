@@ -26,7 +26,7 @@ export default function OnBoardingScreen({navigation}) {
             <StatusBar style="light"/>
             <Onboarding
                 onDone={() => {
-                    storeData().then(() => console.log('done'))
+                    storeData().then()
                 }}
                 skipLabel={false}
                 pages={
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'white',
-        fontFamily: 'ProximaNova-Bold',
+        fontFamily: 'Poppins-SemiBold',
         fontSize: 21,
     },
     subtitle: {
