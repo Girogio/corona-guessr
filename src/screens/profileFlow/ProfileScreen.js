@@ -54,7 +54,7 @@ export default function ProfileScreen({navigation}) {
 
     useEffect(() => {
         firebase.database()
-            .ref('users/' + firebase.auth().currentUser.uid)
+            .ref('users/' + firebase.auth().currentUser?.uid)
             .on('value', snapshot => {
                 const userStuff = {
                     date_created: snapshot.val().date_created,
