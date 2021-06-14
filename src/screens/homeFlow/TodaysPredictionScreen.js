@@ -16,7 +16,7 @@ function renderItem({item}) {
     const BadgedIcon = (Icon)
     return (
         <View style={{
-            backgroundColor: item.uid === firebase.auth().currentUser.uid ? '#18647C' : '#252525',
+            backgroundColor: item.uid === firebase.auth().currentUser?.uid ? '#18647C' : '#252525',
             alignSelf: 'center',
             flexDirection: 'row',
             paddingVertical: 17,

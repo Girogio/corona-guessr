@@ -18,7 +18,7 @@ import 'firebase/auth'
 import 'firebase/database'
 
 export default function SubmitPredictionScreen({navigation}) {
-    const user = firebase.auth().currentUser;
+    const user = firebase.auth().currentUser
     const [guessFocus, setGuessFocus] = useState(false);
     const guessFocusStyle = guessFocus ? MyStyles.textInputFocus : MyStyles.textInputBlurred;
     const [guess, setGuess] = useState(0)

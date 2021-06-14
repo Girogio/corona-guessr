@@ -20,6 +20,7 @@ import textBoxStyles from '../../../assets/styles/MyStyles'
 import firebase from "firebase/app";
 import 'firebase/auth'
 import 'firebase/database'
+import {SocialIcon} from "react-native-elements";
 
 export const addProfile = (name, email, password) => new Promise((resolve, reject) => {
     let d = new Date();
@@ -113,7 +114,7 @@ export default function RegisterScreen({navigation}) {
                         secureTextEntry={true}
                     />
                     <GradientButton
-                        style={{marginVertical: 8, marginTop: 37, fontFamily: 'ProximaNova-Bold'}}
+                        style={{marginVertical: 8, marginTop: 37, fontFamily: 'Poppins-SemiBold'}}
                         text="REGISTER"
                         textStyle={{fontSize: 15, lineHeight: 18}}
                         gradientBegin="#01B6FC"
@@ -134,33 +135,23 @@ export default function RegisterScreen({navigation}) {
                         </View>
                         <View style={{flex: 1, height: 1, backgroundColor: 'white'}}/>
                     </View>
-                    <Text style={{color: 'white', fontFamily: 'ProximaNova-Bold', marginTop: 10}}>
-                        Register with:
-                    </Text>
                     <View style={styles.socialLoginContainer}>
-                        <TouchableOpacity onPress={() => alert('Google!')}>
-                            <View style={styles.googleButton} onPress={() => alert('Google!')}>
-                                <Icon name="logo-google" size={17} color="white"/>
-                                <Text style={{
-                                    paddingLeft: 10,
-                                    fontSize: 14,
-                                    color: 'white',
-                                    fontFamily: 'ProximaNova-Regular'
-                                }}>Google</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => alert('Facebook!')}>
-                            <View style={styles.facebookButton}>
-                                <Icon name="logo-facebook" size={17} style={{paddingLeft: 20}} color="white"/>
-                                <Text style={{
-                                    paddingLeft: 7,
-                                    paddingRight: 16,
-                                    fontSize: 14,
-                                    fontFamily: 'ProximaNova-Regular',
-                                    color: 'white'
-                                }}>Facebook</Text>
-                            </View>
-                        </TouchableOpacity>
+                        <SocialIcon
+                            style={{borderRadius: 10, padding: 15, height: 50, width: 130}}
+                            title='Google'
+                            button
+                            onPress={() => alert('Google')}
+                            type='google'
+                        />
+                        <SocialIcon
+                            style={{borderRadius: 10, padding: 15, height: 50, width: 130}}
+                            title='Facebook'
+                            button
+                            fontStyle={{fontSize: 15}}
+                            iconStyle={{}}
+                            onPress={() => alert('Facebook!')}
+                            type='facebook'
+                        />
                     </View>
                 </View>
 
@@ -185,7 +176,7 @@ const styles = StyleSheet.create({
     titleText: {
         fontSize: 30,
         color: '#fff',
-        fontFamily: 'ProximaNova-Bold'
+        fontFamily: 'Poppins-SemiBold'
     },
     subTitle: {
         color: 'gray',
@@ -203,7 +194,7 @@ const styles = StyleSheet.create({
         height: 48,
         width: 310,
         borderWidth: 2,
-        fontFamily: 'ProximaNova-Regular',
+        fontFamily: 'Poppins-Regular',
         color: '#fff',
         marginTop: 17,
         paddingRight: 10,
@@ -216,7 +207,7 @@ const styles = StyleSheet.create({
         height: 48,
         width: 310,
         borderWidth: 2,
-        fontFamily: 'ProximaNova-Regular',
+        fontFamily: 'Poppins-Regular',
         color: '#fff',
         marginTop: 17,
         paddingRight: 10,
@@ -229,7 +220,10 @@ const styles = StyleSheet.create({
         height: 48,
         width: 310,
         borderWidth: 2,
-        fontFamily: 'ProximaNova-Regular',
+        alignContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: 'Poppins-Regular',
         color: '#fff',
         marginTop: 17,
         paddingRight: 10,
@@ -242,7 +236,7 @@ const styles = StyleSheet.create({
         height: 48,
         width: 310,
         borderWidth: 2,
-        fontFamily: 'ProximaNova-Regular',
+        fontFamily: 'Poppins-Regular',
         color: '#fff',
         marginTop: 17,
         paddingRight: 10,
@@ -251,7 +245,7 @@ const styles = StyleSheet.create({
     forgotPasswordText: {
         color: '#01B3FE',
         paddingTop: 20,
-        fontFamily: 'ProximaNova-Bold'
+        fontFamily: 'Poppins-SemiBold'
     },
     orContainer: {
         flexDirection: 'row'
@@ -261,31 +255,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'white',
         fontSize: 20,
-        fontFamily: 'ProximaNova-Bold',
+        fontFamily: 'Poppins-SemiBold',
     },
     socialLoginContainer: {
         flexDirection: 'row',
-        marginTop: 20,
         color: 'white',
+        marginTop: 10,
+        alignContent: 'center',
         justifyContent: 'space-between'
     },
-    googleButton: {
-        width: 113,
-        height: 42,
-        borderRadius: 10,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#de5246'
-    },
-    facebookButton: {
-        width: 113,
-        height: 42,
-        marginLeft: 21,
-        borderRadius: 10,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#3B5998'
-    }
 });
