@@ -167,9 +167,9 @@ function MainStack(first_timer) {
                                  inactiveBackgroundColor: '#242632',
                                  activeBackgroundColor: '#242632'
                              }}>
-            <mainStack.Screen name="Home" component={HomeStack}/>
-            <mainStack.Screen name="Leaderboard" component={LeaderboardStack}/>
-            <mainStack.Screen name="Profile" component={ProfileStack}/>
+            <mainStack.Screen name="Home" component={HomeStack} options={{unmountOnBlur: true}}/>
+            <mainStack.Screen name="Leaderboard" component={LeaderboardStack} options={{unmountOnBlur: true}}/>
+            <mainStack.Screen name="Profile" component={ProfileStack} options={{unmountOnBlur: true}}/>
         </mainStack.Navigator>
     )
 }
@@ -182,12 +182,12 @@ export default function App() {
     function PreMainStack() {
         return (
             <preMainStack.Navigator
-                initialRouteName={firstTime === 'true' ? 'Tutorial' : 'MainStack'}
+                initialRouteName={!firstTime ? 'Tutorial' : 'MainStack'}
                 screenOptions={{
                     headerShown: false,
                 }}>
                 <preMainStack.Screen name={'Tutorial'} component={OnBoardingScreen}/>
-                <preMainStack.Screen name={'MainStack'} component={MainStack}/>
+                <preMainStack.Screen name={'MainStack'} component={MainStack} options={{unmountOnBlur: true}}/>
             </preMainStack.Navigator>
         )
     }
