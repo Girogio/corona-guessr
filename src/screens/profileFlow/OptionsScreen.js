@@ -99,7 +99,7 @@ export default function OptionsScreen({navigation}) {
                     <TouchableOpacity onPress={() => navigation.navigate('ResetPass')}>
                         <Text style={styles.entrySubtitleText}>Change password</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('ResetPass')}>
                         <MaterialIcon color={'#ADADAD'} name={'chevron-right'} size={25}/>
                     </TouchableOpacity>
                 </View>
