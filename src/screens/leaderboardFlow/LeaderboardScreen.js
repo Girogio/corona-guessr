@@ -1,33 +1,39 @@
-import React, {Component, useEffect, useState} from "react";
+import React, {Component, useEffect, useRef, useState} from "react";
 import {FlatList, Image, StatusBar, Text, TouchableOpacity, View} from "react-native";
 import MyStyles from "../../../assets/styles/MyStyles";
 import {Header} from "react-native-elements";
 import Colors from "../../../assets/colors/Colors";
-import leaderboardData from "../../../assets/data/leaderboardData";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import firebase from 'firebase/app'
-import {getDate, getMonth} from 'date-fns'
+import Toast from "react-native-fast-toast";
 import 'firebase/database'
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp,
+} from 'react-native-responsive-screen'
 
-const rerenderLeaderboardItem = ({item}) => {
+import Icon from "react-native-vector-icons/Ionicons";
+
+const renderLeaderboardItem = ({item}) => {
     return (
         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 25}}>
             {/*Ranking*/}
-            <View style={{alignItems: 'center', justifyContent: 'center', marginRight: 10}}>
-                <Text style={{color: 'white', marginBottom: -13}}> {item.position} </Text>
-                <MaterialIcon
+            <View style={{alignItems: 'center', paddingRight: 13, justifyContent: 'center',}}>
+                <Text style={{color: 'white'}}> {item.position} </Text>
+                {/*<MaterialIcon
                     name={item.hasIncreased ? 'arrow-drop-up' : 'arrow-drop-down'}
                     color={item.hasIncreased ? 'green' : 'red'}
                     size={40}
-                />
+                />*/}
             </View>
             {/*Main content*/}
             <View style={{
-                backgroundColor: '#252525',
+                backgroundColor: item.uid === firebase.auth().currentUser.uid ? '#18647C' : Colors.lighterBackground,
                 alignItems: 'center',
-                width: '85%',
+                width: wp('85%'),
                 flexDirection: 'row',
                 padding: 10,
+                alignSelf: 'center',
                 justifyContent: 'space-between',
                 borderRadius: 30
             }}>
@@ -37,9 +43,9 @@ const rerenderLeaderboardItem = ({item}) => {
                         style={{
                             width: 58,
                             height: 58,
-                            borderRadius: 30
+                            borderRadius: 29
                         }}
-                        source={item.image}/>
+                        source={require('../../../assets/images/justin.jpg')}/>
                     <Text style={{color: 'white', marginLeft: 8}}> {item.name}</Text>
                 </View>
 
@@ -49,13 +55,10 @@ const rerenderLeaderboardItem = ({item}) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginTop: 7,
-                    paddingLeft: 12,
-                    marginLeft: 48,
-                    paddingRight: 12,
-                    marginRight: 12,
-                    paddingTop: 3,
-                    paddingBottom: 3,
-                    borderRadius: 50
+                    marginRight: 10,
+                    paddingHorizontal: 12,
+                    paddingVertical: 3,
+                    borderRadius: 50,
                 }}>
                     <Text style={{color: '#19D4F8', fontSize: 10}}>{
                         item.points} points
@@ -68,95 +71,113 @@ const rerenderLeaderboardItem = ({item}) => {
 
 export default function LeaderboardScreen() {
 
-    const [leaderboard, setLeaderboard] = useState([
-        {
-            name: '',
-            points: '',
-            position: '',
-            hasIncreased: false,
-        }
-    ])
     const [caseStatistics, setCaseStatistics] = useState([])
     const [userData, setUserData] = useState([])
+    const toast = useRef(null);
+
+    function onRefresh() {
+        toast.current.show("Task finished successfully");
+
+        /*Update User Data*/
+        firebase.database().ref('users/').once('value', snapshot => {
+            const toUserData = []
+            let toUserDataDotGuesses = []
+            snapshot.forEach(user => {
+                user.child('/guesses/').forEach(guess => {
+                    toUserDataDotGuesses.push({
+                        date: guess.key,
+                        guess: guess.val().guess
+                    })
+                })
+                toUserData.push({
+                    uid: user.key,
+                    name: user.val().displayName,
+                    points: user.child('/score/points').val(),
+                    guesses: toUserDataDotGuesses,
+                    position: user.child('/score/position').val(),
+                })
+
+                toUserDataDotGuesses = []
+            })
+            setUserData(toUserData)
+        })
+
+        /*Update Statistics*/
+        firebase.database().ref('statistics/').on('value', snapshot => {
+            const toStatistics = []
+            snapshot.forEach(day => {
+                toStatistics.push({
+                    date: day.key,
+                    new_cases: day.val().new_cases
+                })
+            })
+            setCaseStatistics(toStatistics)
+        })
+
+        /*Set all user points*/
+        userData.forEach(user => {
+                user.points = 0
+                user.guesses.forEach(guess => {
+                    caseStatistics.forEach((entry) => {
+                        if (guess.date === entry.date)
+                            if (guess.guess == entry.new_cases)
+                                ++user.points;
+                    })
+
+
+                })
+                firebase.database().ref('users/' + user.uid + '/score/points').set(user.points).then(() => {
+
+                })
+
+            }
+        )
+
+
+        setUserData(userData.sort((a, b) => {
+            return b.points - a.points;
+        }))
+
+        userData.forEach(user => {
+            /// if (user.score)
+            firebase.database().ref('users/' + user.uid + '/score/position').set((userData.indexOf((user)) + 1))
+        })
+    }
 
 
     useEffect(() => {
-            /*Update User Data*/
-            firebase.database().ref('users/').on('value', snapshot => {
-                const toUserData = []
-                let toUserDataDotGuesses = []
-                snapshot.forEach(user => {
-                    user.child('/guesses/').forEach(guess => {
-                        toUserDataDotGuesses.push({
-                            date: guess.key,
-                            guess: guess.val().guess
-                        })
-                    })
-                    toUserData.push({
-                        uid: user.key,
-                        name: user.val().displayName,
-                        points: user.child('/score/points').val(),
-                        guesses: toUserDataDotGuesses,
-                        position: user.child('/score/position').val(),
-                    })
-
-                    toUserDataDotGuesses = []
-                })
-                setUserData(toUserData)
-                console.log(toUserData)
-            })
-
-            /*Update Statistics*/
-            firebase.database().ref('statistics/').on('value', snapshot => {
-                const toStatistics = []
-                snapshot.forEach(day => {
-                    toStatistics.push({
-                        date: day.key,
-                        new_cases: day.val().new_cases
-                    })
-                })
-                setCaseStatistics(toStatistics)
-            })
-
-            /*Set all user points*/
-            userData.forEach(user => {
-                    user.points = 0
-                    user.guesses.forEach(guess => {
-                        caseStatistics.forEach((entry) => {
-                            if (guess.date === entry.date)
-                                if (guess.guess == entry.new_cases)
-                                    ++user.points;
-                        })
-
-
-                    })
-                    firebase.database().ref('users/' + user.uid + '/score/points').set(user.points).then(() => {
-
-                    })
-
-                }
-            )
-            setUserData(userData.sort((a, b) => {
-                return b.points - a.points;
-            }))
-
-            userData.forEach(user => {
-               /// if (user.score)
-                    firebase.database().ref('users/' + user.uid + '/score/position').set((userData.indexOf((user)) + 1))
-            })
-        },
-        []
-    )
-//
+        onRefresh()
+    }, [])
 
     return (
-        <View>
-            <FlatList
-                data={userData}
-                renderItem={rerenderLeaderboardItem}
-                keyExtractor={item => item.uid}
-                initialNumToRender={3}
+        <View style={[MyStyles.container, {
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+        }]}>
+            <StatusBar style="light"/>
+            <Header backgroundColor={Colors.darkBackground}
+                    rightComponent={
+                        <TouchableOpacity onPress={() => onRefresh()}>
+                            <Icon name={'reload'} style={{marginRight: wp('6%')}}
+                                  size={30} color={'white'}/>
+                        </TouchableOpacity>
+                    }
+                    centerComponent={
+                        <Text style={MyStyles.mainHeaderText}>LEADERBOARD</Text>
+                    }
+
+                    containerStyle={[MyStyles.mainHeaderContainer, {paddingBottom: 40}]}
             />
+            <FlatList
+                data={userData.sort((a, b) => {
+                    return a.position - b.position;
+                })}
+                renderItem={renderLeaderboardItem}
+                keyExtractor={item => item.uid}
+            />
+            <Toast ref={toast}/>
+
         </View>
     )
 }
@@ -167,21 +188,6 @@ class Main extends Component {
     render() {
         return (
             <View style={MyStyles.container}>
-                <StatusBar style="light"/>
-                <Header backgroundColor={Colors.darkBackground}
-                        centerContainerStyle={MyStyles.mainHeaderCenterContainer}
-                        centerComponent={
-                            <TouchableOpacity
-                                onPress={() => {
-
-                                    this.flatListRef.scrollToIndex({animated: true, index: 0})
-                                }}>
-                                <Text style={MyStyles.mainHeaderText}>LEADERBOARD</Text>
-                            </TouchableOpacity>
-                        }
-                        containerStyle={MyStyles.mainHeaderContainer}
-                />
-
                 {/*<View style={{
                     alignItems: 'flex-end',
                     flexDirection: 'row',

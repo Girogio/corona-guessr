@@ -1,11 +1,15 @@
 import React, {useEffect, useState} from "react";
+import SwitchToggle from 'react-native-switch-toggle'
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import MyStyles from "../../../assets/styles/MyStyles";
 import Colors from "../../../assets/colors/Colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import {Header} from "react-native-elements";
-import SwitchToggle from "react-native-switch-toggle";
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp,
+} from 'react-native-responsive-screen'
 import firebase from "firebase/app";
 import "firebase/auth"
 
@@ -44,19 +48,17 @@ export default function OptionsScreen({navigation}) {
             <Header backgroundColor={Colors.darkBackground}
                     leftComponent={
                         <TouchableOpacity onPress={() => navigation.pop(1)}>
-                            <Icon name={'ios-chevron-back'} size={30} color={'white'} style={{paddingLeft: 35}}/>
+                            <Icon name={'ios-chevron-back'} size={30} color={'white'} style={{marginLeft: wp('6%')}}/>
                         </TouchableOpacity>
                     }
-                    leftContainerStyle={MyStyles.mainHeaderLeftContainer}
-                    centerContainerStyle={MyStyles.mainHeaderCenterContainer}
                     centerComponent={<Text style={MyStyles.mainHeaderText}>SETTINGS</Text>}
                     containerStyle={MyStyles.mainHeaderContainer}
             />
             <View style={styles.menuContainer}>
                 {/*Profile stuff*/}
                 <View style={{flexDirection: 'row', marginTop: 19, alignItems: 'center'}}>
-                    <Image style={{borderRadius: 100, height: 38, width: 38}}
-                           source={{uri: (userData.photoURL === null ? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' : userData.photoURL)}}/>
+                    <Image style={{borderRadius: 110, height: 55, width: 55}}
+                           source={require('../../../assets/images/robert.jpg')}/>
                     <Text style={{fontFamily: 'ProximaNova-Bold', fontSize: 18, marginLeft: 16, color: 'white'}}>
                         {userData.displayName}
                     </Text>
@@ -80,6 +82,15 @@ export default function OptionsScreen({navigation}) {
                         <MaterialIcon color={'#ADADAD'} name={'chevron-right'} size={25}/>
                     </TouchableOpacity>
                 </View>
+                <View style={styles.entrySubtitleContainer}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Tutorial')}>
+                        <Text style={styles.entrySubtitleText}>Replay tutorial</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Tutorial')}>
+                        <MaterialIcon color={'#ADADAD'} name={'chevron-right'} size={25}/>
+                    </TouchableOpacity>
+                </View>
+
                 <View style={styles.divider}/>
 
                 {/*Account section*/}
@@ -139,7 +150,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#252525',
         marginTop: 10,
         paddingLeft: 20,
-        paddingRight: 35,
+        paddingRight: 20,
         borderRadius: 18,
         width: '90%',
         height: '83%'

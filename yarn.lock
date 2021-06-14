@@ -1985,6 +1985,13 @@
   resolved "https://registry.npmjs.org/@protobufjs/utf8/-/utf8-1.1.0.tgz"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
+"@react-native-async-storage/async-storage@^1.13.0":
+  version "1.15.5"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.15.5.tgz#0d221a5ef1cd7a6494a42fcaad43136d68379afb"
+  integrity sha512-4AYehLH39B9a8UXCMf3ieOK+G61wGMP72ikx6/XSMA0DUnvx0PgaeaT2Wyt06kTrDTy8edewKnbrbeqwaM50TQ==
+  dependencies:
+    deep-assign "^3.0.0"
+
 "@react-native-community/art@^1.1.2":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/art/-/art-1.2.0.tgz#386d95393f6042d9006f9d4bc6063fb898794460"
@@ -6333,7 +6340,7 @@ promise@^8.0.3:
   dependencies:
     asap "~2.0.6"
 
-prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -6449,6 +6456,13 @@ react-native-document-picker@^5.0.4:
   resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-5.0.4.tgz#86a874e093284b21896581985b8b6e13e04a4251"
   integrity sha512-PN3NYZFgz6McbcfH5Cu3yf3nE4UBAiJYdL26F5cjypOoCFhdfLz0NM13V/tVOLGhWZXNUmI3g4dhPQBthq+pJg==
 
+react-native-easy-toast@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-easy-toast/-/react-native-easy-toast-2.0.0.tgz#059671ed23efd7fbe2855a1c3e4d21e6c4222a84"
+  integrity sha512-mLvHOy/slCJfgrLfOercIhVKslTF6D7NrJ7XLTRK3BCim7kNO1JdAgQ5+IF6bqdcUcFMIW/GwiauUbnSpynr8Q==
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-elements@^3.4.1:
   version "3.4.1"
   resolved "https://registry.npmjs.org/react-native-elements/-/react-native-elements-3.4.1.tgz"
@@ -6469,6 +6483,11 @@ react-native-expo-fancy-alerts@^2.1.0:
   integrity sha512-3OA8z3Zs+tk371SKG+GlI1zG+iyOV/douaUPzqeNP+nyGUZTHcypKFMhxR+mSVcSM+R+/MKQk16l4eKS4HNG1w==
   dependencies:
     prop-types "^15.7.2"
+
+react-native-fast-toast@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-fast-toast/-/react-native-fast-toast-2.3.0.tgz#676eeff766777ad61d20ba2316275b2ac21ab145"
+  integrity sha512-RsQd44vLDgXiegKg/8/yISARAcIBm55mrLtMiE/X2LN2lk6UzgsjNZkLNfW3rm/ot/OMnh9y4du5WcpBsnyUSw==
 
 react-native-fs@^2.18.0:
   version "2.18.0"
@@ -6514,6 +6533,13 @@ react-native-iphone-x-helper@^1.3.0, react-native-iphone-x-helper@^1.3.1:
   resolved "https://registry.npmjs.org/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz"
   integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
 
+react-native-onboarding-swiper@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/react-native-onboarding-swiper/-/react-native-onboarding-swiper-1.1.4.tgz#cb2d97c769542228d3904a9da13e02359ed6e3f5"
+  integrity sha512-dG2J6giQpt5kKlU+Xe68E9xy+OkmC9Yf5XD7S1mJQ5VvwySfCIXnPojai0PEQ9NmbbH06k9lqN5Ik1PGYnIdVA==
+  dependencies:
+    tinycolor2 "^1.4.1"
+
 react-native-progress@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/react-native-progress/-/react-native-progress-4.1.2.tgz#ffb2264ddfeba409c730e36a9791bb7bbe07a00d"
@@ -6552,6 +6578,24 @@ react-native-responsive-fontsize@^0.5.0:
   dependencies:
     react-native-iphone-x-helper "^1.3.1"
 
+react-native-responsive-screen@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-responsive-screen/-/react-native-responsive-screen-1.4.2.tgz#45280826d24f9accbfdf46a36cb8e6d780f76f28"
+  integrity sha512-BLYz0UUpeohrib7jbz6wDmtBD5OmiuMRko4IT8kIF63taXPod/c5iZgmWnr5qOnK8hMuKiGMvsM3sC+eHX/lEQ==
+
+react-native-root-siblings@^4.0.0:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-root-siblings/-/react-native-root-siblings-4.1.1.tgz#b7742db7634a87f507eb99a5fd699c4f10c46ab0"
+  integrity sha512-sdmLElNs5PDWqmZmj4/aNH4anyxreaPm61c4ZkRiR8SO/GzLg6KjAbb0e17RmMdnBdD0AIQbS38h/l55YKN4ZA==
+
+react-native-root-toast@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-root-toast/-/react-native-root-toast-3.2.1.tgz#f456d029f5c5b76e4b686334f25371465478a3be"
+  integrity sha512-BNf6LKMqcIAonKgqCGQWk+1lduFqSjPYbEF0FygMZbXhODRTvrGUAvAgV6kfamVPOkKHUkPU7dnnvmgEQ8ZDzQ==
+  dependencies:
+    prop-types "^15.5.10"
+    react-native-root-siblings "^4.0.0"
+
 react-native-safe-area-context@3.2.0:
   version "3.2.0"
   resolved "https://registry.npmjs.org/react-native-safe-area-context/-/react-native-safe-area-context-3.2.0.tgz"
@@ -6586,6 +6630,13 @@ react-native-timer@^1.3.6:
   version "1.3.6"
   resolved "https://registry.yarnpkg.com/react-native-timer/-/react-native-timer-1.3.6.tgz#726bae63b5cc6f51a0bd3a9227e07ef0836ff350"
   integrity sha512-/YytE7B2YrnYwqNsoQopxg3GtHwrSH/f3pP9UgpHPpJok33YkNX+sSODI6dt75/FLDKQWIYcDHLc3WkdfKKdTg==
+
+react-native-toast-message@^1.4.9:
+  version "1.4.9"
+  resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-1.4.9.tgz#47f33ac312fe2aee5dbdd4ae14745fa0d354102e"
+  integrity sha512-QhHzzsiymKpHEWz2nUKQjQMRuGN+/a8cOwDXJcz3TQFY03p20f6sJW9JKw3KkMfvWiUhGbApCPpNU6tHaAZ32w==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-native-vector-icons@^8.1.0:
   version "8.1.0"

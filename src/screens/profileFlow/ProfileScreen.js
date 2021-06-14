@@ -4,7 +4,7 @@ import {
     Alert,
     FlatList,
     Image, Linking,
-    Platform,
+    Platform, SafeAreaView,
     StyleSheet,
     Text,
     TouchableNativeFeedback,
@@ -13,6 +13,10 @@ import {
 } from "react-native";
 import {Header} from "react-native-elements";
 import Colors from "../../../assets/colors/Colors";
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp,
+} from 'react-native-responsive-screen'
 import Icon from "react-native-vector-icons/Ionicons";
 import MyStyles from "../../../assets/styles/MyStyles";
 import firebase from "firebase/app";
@@ -77,7 +81,7 @@ export default function ProfileScreen({navigation}) {
     function renderAchievementItem({item}) {
         return (
             <TouchableNativeFeedback>
-                <View style={styles.leftButtonContainer}>
+                <View style={[styles.leftButtonContainer]}>
                     <Text style={styles.buttonTitleText}>{item.title}</Text>
                     <View style={styles.buttonStatusContainer}>
                         <Icon color='white' size={22} name={item.icon}/>
@@ -92,11 +96,12 @@ export default function ProfileScreen({navigation}) {
 
     //console.log(userData)
     return (
-        <View style={MyStyles.container}>
+        <SafeAreaView style={MyStyles.container}>
             <Header backgroundColor={Colors.darkBackground}
                     rightComponent={
                         <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-                            <Icon name={'settings-outline'} size={30} color={'white'}/>
+                            <Icon name={'settings-outline'} style={{marginRight: wp('6%')}}
+                                  size={30} color={'white'}/>
                         </TouchableOpacity>
                     }
                     centerComponent={
@@ -104,13 +109,11 @@ export default function ProfileScreen({navigation}) {
                     }
 
                     containerStyle={MyStyles.mainHeaderContainer}
-                    rightContainerStyle={{marginRight: 20}}
-
-                    centerContainerStyle={MyStyles.mainHeaderCenterContainer}
             />
             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                 <View>
-                    {image && <Image source={{uri: image}} style={{
+                    {/* {image && <Image source={{uri: image}} style={{*/}
+                    {<Image source={require('../../../assets/images/giorgio.jpg')} style={{
                         width: 120,
                         height: 120,
                         borderRadius: 60,
@@ -142,14 +145,16 @@ export default function ProfileScreen({navigation}) {
             </View>
             <View style={{alignSelf: 'flex-start', paddingLeft: 30, paddingTop: 30}}>
                 <Text style={{fontFamily: 'Poppins-SemiBold', color: 'white', fontSize: 24}}>Achievements</Text>
-
+            </View>
+            <View style={{alignSelf: 'center'}}>
                 <FlatList
                     data={Achievements}
                     renderItem={renderAchievementItem}
+                    numColumns={2}
                     keyExtractor={(item) => item.id}
                 />
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -157,8 +162,8 @@ const styles = StyleSheet.create({
     leftButtonContainer: {
         width: 160,
         height: 170,
-        paddingLeft: 12,
-        paddingRight: 12,
+        margin: 10,
+        paddingHorizontal: 12,
         backgroundColor: '#252525',
         borderRadius: 24
     },

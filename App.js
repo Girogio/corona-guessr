@@ -24,6 +24,7 @@ import {useFonts} from "expo-font";
 const mainStack = createBottomTabNavigator();
 const loginStack = createStackNavigator();
 const homeStack = createStackNavigator();
+const preMainStack = createStackNavigator();
 const leaderboardStack = createStackNavigator();
 const profileStack = createStackNavigator();
 
@@ -33,9 +34,10 @@ import firebaseConfig from "./auth";
 import ResetPasswordScreen from "./src/screens/profileFlow/ResetPasswordScreen";
 import OptionsScreen from "./src/screens/profileFlow/OptionsScreen";
 import {Image, StatusBar, View} from "react-native";
-import {Video, AVPlaybackStatus} from "expo-av";
-import {isAfter} from "date-fns";
+import {Video} from "expo-av";
+import OnBoardingScreen from "./src/screens/homeFlow/OnBoardingScreen";
 import * as Papa from "papaparse";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 if (!firebase.apps.length) {
@@ -44,8 +46,7 @@ if (!firebase.apps.length) {
     console.log('connected')
 
 } else {
-    firebase.app(); // if already initialized, use that one
-    console.log('connected again')
+    firebase.app();
 }
 
 function LoginStack() {
@@ -69,7 +70,8 @@ function LoginStack() {
     )
 }
 
-function HomeStack() {
+
+export function HomeStack() {
     return (
         <homeStack.Navigator screenOptions={{
             headerShown: false,
@@ -103,6 +105,8 @@ function LeaderboardStack() {
             }}/>
         </leaderboardStack.Navigator>
     )
+
+
 }
 
 function ProfileStack() {
@@ -126,9 +130,9 @@ function ProfileStack() {
     )
 }
 
-function MainStack() {
+function MainStack(first_timer) {
     return (
-        <mainStack.Navigator screenOptions={({route}) => ({
+        <mainStack.Navigator initialRouteName={first_timer ? 'Home' : 'Tutorial'} screenOptions={({route}) => ({
             tabBarIcon: ({focused, color, size}) => {
                 let iconName;
 
@@ -172,9 +176,35 @@ function MainStack() {
 
 export default function App() {
     const video = React.useRef(null);
+    const [firstTime, setFirstTime] = useState('')
     const [status, setStatus] = React.useState({});
 
+    function PreMainStack() {
+        return (
+            <preMainStack.Navigator
+                initialRouteName={firstTime === 'true' ? 'Tutorial' : 'MainStack'}
+                screenOptions={{
+                    headerShown: false,
+                }}>
+                <preMainStack.Screen name={'Tutorial'} component={OnBoardingScreen}/>
+                <preMainStack.Screen name={'MainStack'} component={MainStack}/>
+            </preMainStack.Navigator>
+        )
+    }
+
+    const getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@first_timer')
+            if (value !== null) {
+                setFirstTime(value)
+            }
+        } catch (e) {
+            setFirstTime('true')
+        }
+    }
+
     useEffect(() => {
+        getData().then()
         /*Get the cases ASAP*/
         Papa.parse('https://raw.githubusercontent.com/COVID19-Malta/COVID19-Cases/master/COVID-19%20Malta%20-%20Aggregate%20Data%20Set.csv', {
             dynamicTyping: true,
@@ -189,13 +219,14 @@ export default function App() {
                 firebase.database().ref(path).set(results.data[results.data.length - 2].New_Cases).then()
             }
         })
-
     })
 
     const [currentUser, setCurrentUser] = React.useState(null)
     firebase.auth().onAuthStateChanged(user => {
         setCurrentUser(user)
+        getData().then()
     });
+
 
     let [fontsLoaded] = useFonts({
         'SFPro-Light': require('./assets/fonts/SFPro-Light.ttf'),
@@ -240,8 +271,7 @@ export default function App() {
                         style={{height: 37, width: 96, alignSelf: 'center', marginBottom: 80}}/>
                 </View>
 
-            ) : (!currentUser) ? (LoginStack())
-                : (MainStack())}
+            ) : (currentUser) ? (PreMainStack()) : (LoginStack())}
         </NavigationContainer>
     )
 

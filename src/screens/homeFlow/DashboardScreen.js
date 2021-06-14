@@ -43,10 +43,14 @@ export default function DashboardScreen({navigation}) {
     useEffect(() => {
 
         const now = new Date()
-        const predictionUpdate = setInterval(() => {
-            setRemainingTime().then({})
-        }, 1000)
 
+        let predictionUpdate = setInterval(() => {
+            setRemainingTime().then(() => {
+                firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value').then(snapshot => {
+                    userData.hasGuessed = snapshot.child(path + '/hasGuessed').val() !== null;
+                })
+            }, 1000)
+        });
         const path = '/guesses/' + (now.getDate() + 1 < 10 ? '0' + now.getDate() + 1 : (now.getDate() + 1)) + '-' + ((now.getMonth() + 1) < 10 ? '0' + (now.getMonth() + 1) : (now.getMonth() + 1)) + '-' + now.getFullYear()
 
         firebase.database()
@@ -91,21 +95,20 @@ export default function DashboardScreen({navigation}) {
         <View style={MyStyles.container}>
             <StatusBar style="light"/>
             <Header backgroundColor={Colors.darkBackground}
-                    centerContainerStyle={MyStyles.mainHeaderCenterContainer}
+                    centerComponent={
+                        <Text style={MyStyles.mainHeaderText}>DASHBOARD</Text>
+                    }
 
-                    centerComponent={<Text style={MyStyles.mainHeaderText}>DASHBOARD</Text>}
-                    containerStyle={MyStyles.mainHeaderContainer}
+                    containerStyle={[MyStyles.mainHeaderContainer, {paddingBottom: 0}]}
             />
 
             <Text style={styles.subtitle}>Welcome back,
                 <Text style={styles.nameText}> {userData.displayName.split(" ")[0]}</Text>.
             </Text>
             <Image style={styles.maltaImage} source={require('../../../assets/images/MALTA.png')}/>
-            {/*Button 1*/}
             <View style={{marginTop: 50, flexDirection: 'row'}}>
                 {/*Button 1*/}
                 <TouchableNativeFeedback
-
                     onPress={() => userData.hasGuessed ? null : navigation.navigate('SubmitPrediction')}>
                     <View style={styles.leftButtonContainer}>
                         <Text style={styles.buttonTitleText}>Your{'\n'}Prediction</Text>
@@ -134,7 +137,9 @@ export default function DashboardScreen({navigation}) {
                         </View>
                         <View style={styles.buttonStatusContainer}>
                             <Icon color='white' size={22} name={'people-outline'}/>
-                            <Text style={styles.buttonStatusText}></Text>
+                            {/*
+                         <Text style={styles.buttonStatusText}></Text>
+                            */}
                         </View>
                         <View style={styles.divider}/>
                         <Text style={styles.buttonStatusText}>See what others{'\n'}predicted .</Text>
@@ -160,7 +165,7 @@ const styles = StyleSheet.create({
         paddingTop: 23,
         color: 'white',
         letterSpacing: 0.2,
-        fontFamily: 'Georgia-Bold',
+        fontFamily: 'Poppins-Regular',
         fontSize: 21,
     },
     nameText: {
