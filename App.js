@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from "react";
+import {Image, StatusBar, View} from "react-native";
+import {Video} from "expo-av";
+import {useFonts} from "expo-font";
 
 import {NavigationContainer} from '@react-navigation/native';
-import {
-    createStackNavigator,
-    CardStyleInterpolators,
-    HeaderStyleInterpolators
-} from '@react-navigation/stack';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {createStackNavigator, CardStyleInterpolators, HeaderStyleInterpolators} from '@react-navigation/stack';
+import {AnimatedTabBarNavigator,} from 'react-native-animated-nav-tab-bar'
 
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from "react-native-vector-icons/Ionicons";
+import Colors from "./assets/colors/Colors";
 import LoginScreen from "./src/screens/loginFlow/LoginScreen";
 import RegisterScreen from "./src/screens/loginFlow/RegisterScreen";
 import ForgotPasswordScreen from "./src/screens/loginFlow/ForgotPasswordScreen";
@@ -17,16 +19,6 @@ import ProfileScreen from "./src/screens/profileFlow/ProfileScreen";
 import SubmitPredictionScreen from "./src/screens/homeFlow/SubmitPredictionScreen";
 import TodaysPredictionScreen from "./src/screens/homeFlow/TodaysPredictionScreen";
 
-
-import {
-    AnimatedTabBarNavigator,
-    DotSize,
-    TabElementDisplayOptions,
-    TabButtonLayout,
-    IAppearanceOptions
-} from 'react-native-animated-nav-tab-bar'
-import {useFonts} from "expo-font";
-
 const mainStack = AnimatedTabBarNavigator();
 const loginStack = createStackNavigator();
 const homeStack = createStackNavigator();
@@ -34,19 +26,16 @@ const preMainStack = createStackNavigator();
 const leaderboardStack = createStackNavigator();
 const profileStack = createStackNavigator();
 
+import ResetPasswordScreen from "./src/screens/profileFlow/ResetPasswordScreen";
+import OptionsScreen from "./src/screens/profileFlow/OptionsScreen";
+import OnBoardingScreen from "./src/screens/homeFlow/OnBoardingScreen";
+
 import firebase from 'firebase/app'
 import "firebase/auth";
 import firebaseConfig from "./auth";
-import ResetPasswordScreen from "./src/screens/profileFlow/ResetPasswordScreen";
-import OptionsScreen from "./src/screens/profileFlow/OptionsScreen";
-import {Image, StatusBar, View} from "react-native";
-import {Video} from "expo-av";
-import OnBoardingScreen from "./src/screens/homeFlow/OnBoardingScreen";
+
 import * as Papa from "papaparse";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Colors from "./assets/colors/Colors";
-import Ionicons from "react-native-vector-icons/Ionicons";
-
 
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
@@ -157,7 +146,6 @@ function MainStack() {
                 inactiveTintColor: "#222222",
             }}
         >
-
             <mainStack.Screen name="Home"
                               component={DashboardScreen}
                               options={{
