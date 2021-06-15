@@ -18,10 +18,16 @@ import SubmitPredictionScreen from "./src/screens/homeFlow/SubmitPredictionScree
 import TodaysPredictionScreen from "./src/screens/homeFlow/TodaysPredictionScreen";
 
 
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {
+    AnimatedTabBarNavigator,
+    DotSize,
+    TabElementDisplayOptions,
+    TabButtonLayout,
+    IAppearanceOptions
+} from 'react-native-animated-nav-tab-bar'
 import {useFonts} from "expo-font";
 
-const mainStack = createMaterialBottomTabNavigator();
+const mainStack = AnimatedTabBarNavigator();
 const loginStack = createStackNavigator();
 const homeStack = createStackNavigator();
 const preMainStack = createStackNavigator();
@@ -39,7 +45,7 @@ import OnBoardingScreen from "./src/screens/homeFlow/OnBoardingScreen";
 import * as Papa from "papaparse";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Colors from "./assets/colors/Colors";
-import Icon from "react-native-vector-icons/Ionicons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 
 if (!firebase.apps.length) {
@@ -132,39 +138,60 @@ function ProfileStack() {
     )
 }
 
-function MainStack(first_timer) {
+function MainStack() {
     return (
         <mainStack.Navigator
-            style={{backgroundColor: Colors.darkBackground}}
-            shifting={true}
-            initialRouteName={first_timer ? 'Home' : 'Tutorial'}
-            activeColor={Colors.primary}
-            barStyle={{
-                backgroundColor: Colors.lighterBackground,
-                paddingTop: 10,
-                alignItems: 'center',
-                justifyContent: 'center',
-                paddingBottom: 10
+            appearance={{
+                floating: true,
+                tabBarBackground: Colors.lighterPrimary,
+                dotSize: 'small',
+                activeColors: "#fff",
+                activeTabBackgrounds: 'red'
+            }}
+            tabStyle={{
+                backgroundColor: Colors.primary,
+            }}
+
+            tabBarOptions={{
+                activeTintColor: "black",
+                inactiveTintColor: "#222222",
             }}
         >
-            <mainStack.Screen name="Home" component={HomeStack} options={{
-                tabBarLabel: 'Home',
-                tabBarIcon: ({focused, color}) => (
-                    <Icon name={focused ? 'ios-home' : 'ios-home-outline'} size={20} color={color}/>
-                ),
-            }}/>
-            <mainStack.Screen name="Leaderboard" component={LeaderboardStack} options={{
-                tabBarLabel: 'Leaderboard',
-                tabBarIcon: ({focused, color}) => (
-                    <MaterialIcons name={focused ? 'bar-chart' : 'bar-chart'} size={20} color={color}/>
-                ),
-            }}/>
-            <mainStack.Screen name="Profile" component={ProfileStack} options={{
-                tabBarLabel: 'Profile',
-                tabBarIcon: ({focused, color}) => (
-                    <MaterialIcons name={focused ? 'person' : 'person-outline'} size={20} color={color}/>
-                ),
-            }}/>
+
+            <mainStack.Screen name="Home"
+                              component={DashboardScreen}
+                              options={{
+                                  tabBarLabel: "Home",
+                                  tabBarIcon: ({focused}) => (
+                                      <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} color={Colors.primary}
+                                                size={20}/>
+                                  ),
+                              }}
+            />
+            <mainStack.Screen name="Leaderboard"
+                              component={LeaderboardStack}
+                              options={{
+                                  tabBarLabel: "Home",
+                                  tabBarIcon: () => (
+                                      <MaterialIcons
+                                          name="bar-chart"
+                                          color={Colors.primary}
+                                          size={20}/>
+                                  ),
+                              }}
+            />
+            <mainStack.Screen name="Profile"
+                              component={ProfileStack}
+                              options={{
+                                  tabBarLabel: "Home",
+                                  tabBarIcon: ({focused}) => (
+                                      <MaterialIcons
+                                          name={focused ? 'ios-person-outliner' : 'ios-person-outline'}
+                                          color={Colors.primary}
+                                          size={20}/>
+                                  ),
+                              }}
+            />
         </mainStack.Navigator>
     )
 }
@@ -177,14 +204,12 @@ export default function App() {
     function PreMainStack() {
         return (
             <preMainStack.Navigator
-                style={{backgroundColor: Colors.darkBackground}}
-
                 initialRouteName={!firstTime ? 'Tutorial' : 'MainStack'}
                 screenOptions={{
                     headerShown: false,
                 }}>
                 <preMainStack.Screen name={'Tutorial'} component={OnBoardingScreen}/>
-                <preMainStack.Screen name={'MainStack'} component={MainStack}/>
+                <preMainStack.Screen name={'MainStack'} component={MainStack} options={{unmountOnBlur: true}}/>
             </preMainStack.Navigator>
         )
     }

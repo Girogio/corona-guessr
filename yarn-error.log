@@ -1,30 +1,20 @@
 Arguments: 
-  /usr/bin/node /usr/bin/yarn add papaparser
+  D:\Coding\Software\Core\NodeJS\node.exe C:\Users\giorg\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add react-native-animated-nav-tab-bar
 
 PATH: 
-  /home/grongo/corona-guessr/node_modules/.bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+  C:\Users\giorg\Desktop\coronaGuessr\node_modules\.bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Users\giorg\Desktop;D:\Coding\Software\Tools\GIT-CLI\Git\cmd;C:\Users\giorg\AppData\Roaming\nvm;C:\Program Files\nodejs;D:\Coding\Software\Core\NodeJS\;C:\Users\giorg\.cargo\bin;C:\Users\giorg\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\giorg\AppData\Local\Programs\Python\Python39\;D:\Coding\Software\Core\apache-maven-3.6.3\bin;C:\Users\giorg\AppData\Local\Programs\MiKTeX\miktex\bin\x64\;D:\Coding\Software\IDE\Microsoft VS Code\bin;C:\tools\neovim\Neovim\bin;C:\Users\giorg\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\giorg\AppData\Roaming\npm
 
 Yarn version: 
   1.22.10
 
 Node version: 
-  16.3.0
+  14.17.0
 
 Platform: 
-  linux x64
+  win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/papaparser: Not found
-      at Request.params.callback [as _callback] (/usr/lib/node_modules/yarn/lib/cli.js:66988:18)
-      at Request.self.callback (/usr/lib/node_modules/yarn/lib/cli.js:140749:22)
-      at Request.emit (node:events:394:28)
-      at Request.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:141721:10)
-      at Request.emit (node:events:394:28)
-      at IncomingMessage.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:141643:12)
-      at Object.onceWrapper (node:events:513:28)
-      at IncomingMessage.emit (node:events:406:35)
-      at endReadableNT (node:internal/streams/readable:1329:12)
-      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+  Error: EPERM: operation not permitted, unlink 'C:\Users\giorg\Desktop\coronaGuessr\node_modules\.bin\expo'
 
 npm manifest: 
   {
@@ -37,8 +27,10 @@ npm manifest:
       "eject": "expo eject"
     },
     "dependencies": {
+      "@react-native-async-storage/async-storage": "^1.13.0",
       "@react-native-community/masked-view": "0.1.10",
       "@react-navigation/bottom-tabs": "^5.11.11",
+      "@react-navigation/material-bottom-tabs": "^5.3.15",
       "@react-navigation/native": "^5.9.4",
       "@react-navigation/stack": "^5.14.5",
       "axios": "^0.21.1",
@@ -51,25 +43,32 @@ npm manifest:
       "firebase-admin": "^9.9.0",
       "fs": "^0.0.1-security",
       "novelcovid": "^3.0.2",
+      "papaparse": "^5.3.1",
       "react": "16.13.1",
       "react-dom": "16.13.1",
       "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
       "react-native-background-timer": "^2.4.1",
       "react-native-document-picker": "^5.0.4",
+      "react-native-easy-toast": "^2.0.0",
       "react-native-elements": "^3.4.1",
       "react-native-expo-fancy-alerts": "^2.1.0",
       "react-native-fs": "^2.18.0",
       "react-native-gesture-handler": "~1.10.2",
       "react-native-get-real-path": "^1.0.0",
       "react-native-image-picker": "^4.0.3",
+      "react-native-onboarding-swiper": "^1.1.4",
+      "react-native-pager-view": "5.0.12",
+      "react-native-paper": "^4.9.1",
       "react-native-progress": "^4.1.2",
       "react-native-reanimated": "~2.1.0",
       "react-native-responsive-dimensions": "^3.1.1",
       "react-native-responsive-fontsize": "^0.5.0",
+      "react-native-root-toast": "^3.2.1",
       "react-native-safe-area-context": "3.2.0",
       "react-native-screens": "~3.0.0",
       "react-native-stream": "^0.1.9",
       "react-native-timer": "^1.3.6",
+      "react-native-toast-message": "^1.4.9",
       "react-native-vector-icons": "^8.1.0",
       "react-native-web": "~0.13.12",
       "react-papaparse": "^3.16.1",
@@ -87,7 +86,9 @@ npm manifest:
       "expo-image-picker": "^10.1.4",
       "expo-task-manager": "^9.1.0",
       "react-beautiful-switch": "^1.0.2",
+      "react-native-fast-toast": "^2.3.0",
       "react-native-gradient-buttons": "^2.0.2",
+      "react-native-responsive-screen": "^1.4.2",
       "react-native-switch-toggle": "^2.1.1",
       "react-native-video": "^5.1.1"
     },
@@ -1078,6 +1079,14 @@ Lockfile:
     dependencies:
       "@babel/helper-validator-identifier" "^7.14.0"
       to-fast-properties "^2.0.0"
+  
+  "@callstack/react-theme-provider@^3.0.6":
+    version "3.0.6"
+    resolved "https://registry.yarnpkg.com/@callstack/react-theme-provider/-/react-theme-provider-3.0.6.tgz#7dac483037e27e28676bdf1431ba87b88f21118f"
+    integrity sha512-wwKMXfmklfogpalNZT0W+jh76BIquiYUiQHOaPmt/PCyCEP/E6rP+e7Uie6mBZrfkea9WJYJ+mus6r+45JAEhg==
+    dependencies:
+      deepmerge "^3.2.0"
+      hoist-non-react-statics "^3.3.0"
   
   "@cnakazawa/watch@^1.0.3":
     version "1.0.4"
@@ -2085,6 +2094,13 @@ Lockfile:
     resolved "https://registry.npmjs.org/@protobufjs/utf8/-/utf8-1.1.0.tgz"
     integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
   
+  "@react-native-async-storage/async-storage@^1.13.0":
+    version "1.15.5"
+    resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.15.5.tgz#0d221a5ef1cd7a6494a42fcaad43136d68379afb"
+    integrity sha512-4AYehLH39B9a8UXCMf3ieOK+G61wGMP72ikx6/XSMA0DUnvx0PgaeaT2Wyt06kTrDTy8edewKnbrbeqwaM50TQ==
+    dependencies:
+      deep-assign "^3.0.0"
+  
   "@react-native-community/art@^1.1.2":
     version "1.2.0"
     resolved "https://registry.yarnpkg.com/@react-native-community/art/-/art-1.2.0.tgz#386d95393f6042d9006f9d4bc6063fb898794460"
@@ -2237,6 +2253,11 @@ Lockfile:
       nanoid "^3.1.15"
       query-string "^6.13.6"
       react-is "^16.13.0"
+  
+  "@react-navigation/material-bottom-tabs@^5.3.15":
+    version "5.3.15"
+    resolved "https://registry.yarnpkg.com/@react-navigation/material-bottom-tabs/-/material-bottom-tabs-5.3.15.tgz#14f10627b7a4fbae53e9612aab5e7fd971cb329e"
+    integrity sha512-SpCSJxnDqN1a8oHNm3oTt3OYulDEPbeWP1FGwb9zeXW8El2kgwD+69D4KhnUNLYVSKNLu9HadgFOrG3ezp4HPQ==
   
   "@react-navigation/native@^5.9.4":
     version "5.9.4"
@@ -6213,7 +6234,7 @@ Lockfile:
     resolved "https://registry.npmjs.org/pako/-/pako-1.0.11.tgz"
     integrity sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==
   
-  papaparse@^5.2.0:
+  papaparse@^5.2.0, papaparse@^5.3.1:
     version "5.3.1"
     resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-5.3.1.tgz#770b7a9124d821d4b2132132b7bd7dce7194b5b1"
     integrity sha512-Dbt2yjLJrCwH2sRqKFFJaN5XgIASO9YOFeFP8rIBRG2Ain8mqk5r1M6DkfvqEVozVcz3r3HaUGw253hA1nLIcA==
@@ -6433,7 +6454,7 @@ Lockfile:
     dependencies:
       asap "~2.0.6"
   
-  prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+  prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
     version "15.7.2"
     resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz"
     integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -6549,6 +6570,13 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-5.0.4.tgz#86a874e093284b21896581985b8b6e13e04a4251"
     integrity sha512-PN3NYZFgz6McbcfH5Cu3yf3nE4UBAiJYdL26F5cjypOoCFhdfLz0NM13V/tVOLGhWZXNUmI3g4dhPQBthq+pJg==
   
+  react-native-easy-toast@^2.0.0:
+    version "2.0.0"
+    resolved "https://registry.yarnpkg.com/react-native-easy-toast/-/react-native-easy-toast-2.0.0.tgz#059671ed23efd7fbe2855a1c3e4d21e6c4222a84"
+    integrity sha512-mLvHOy/slCJfgrLfOercIhVKslTF6D7NrJ7XLTRK3BCim7kNO1JdAgQ5+IF6bqdcUcFMIW/GwiauUbnSpynr8Q==
+    dependencies:
+      prop-types "^15.5.10"
+  
   react-native-elements@^3.4.1:
     version "3.4.1"
     resolved "https://registry.npmjs.org/react-native-elements/-/react-native-elements-3.4.1.tgz"
@@ -6569,6 +6597,11 @@ Lockfile:
     integrity sha512-3OA8z3Zs+tk371SKG+GlI1zG+iyOV/douaUPzqeNP+nyGUZTHcypKFMhxR+mSVcSM+R+/MKQk16l4eKS4HNG1w==
     dependencies:
       prop-types "^15.7.2"
+  
+  react-native-fast-toast@^2.3.0:
+    version "2.3.0"
+    resolved "https://registry.yarnpkg.com/react-native-fast-toast/-/react-native-fast-toast-2.3.0.tgz#676eeff766777ad61d20ba2316275b2ac21ab145"
+    integrity sha512-RsQd44vLDgXiegKg/8/yISARAcIBm55mrLtMiE/X2LN2lk6UzgsjNZkLNfW3rm/ot/OMnh9y4du5WcpBsnyUSw==
   
   react-native-fs@^2.18.0:
     version "2.18.0"
@@ -6614,6 +6647,27 @@ Lockfile:
     resolved "https://registry.npmjs.org/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz"
     integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
   
+  react-native-onboarding-swiper@^1.1.4:
+    version "1.1.4"
+    resolved "https://registry.yarnpkg.com/react-native-onboarding-swiper/-/react-native-onboarding-swiper-1.1.4.tgz#cb2d97c769542228d3904a9da13e02359ed6e3f5"
+    integrity sha512-dG2J6giQpt5kKlU+Xe68E9xy+OkmC9Yf5XD7S1mJQ5VvwySfCIXnPojai0PEQ9NmbbH06k9lqN5Ik1PGYnIdVA==
+    dependencies:
+      tinycolor2 "^1.4.1"
+  
+  react-native-pager-view@5.0.12:
+    version "5.0.12"
+    resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.0.12.tgz#5106735d944e7f876b006377ab6a18859bf7730c"
+    integrity sha512-QmHUnQeP2qcxDofEOnKRmoUue0RaT55lhNJDfcQ1/SNuxif4Q2UyvDfqeItm1+toaE5tVnXqoreZh82FqUqnvw==
+  
+  react-native-paper@^4.9.1:
+    version "4.9.1"
+    resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-4.9.1.tgz#9b2aadcb1bd48ff6825641df60821e20e0cc8276"
+    integrity sha512-vGgNvQE/GlNSjwJw+1LW0yoULTh7enxln16bYfOoI9Xiz1NOKxhfyQN0/LlZn7JFhRdbXW+3+6yMBJ50Emt+ng==
+    dependencies:
+      "@callstack/react-theme-provider" "^3.0.6"
+      color "^3.1.2"
+      react-native-iphone-x-helper "^1.3.1"
+  
   react-native-progress@^4.1.2:
     version "4.1.2"
     resolved "https://registry.yarnpkg.com/react-native-progress/-/react-native-progress-4.1.2.tgz#ffb2264ddfeba409c730e36a9791bb7bbe07a00d"
@@ -6652,6 +6706,24 @@ Lockfile:
     dependencies:
       react-native-iphone-x-helper "^1.3.1"
   
+  react-native-responsive-screen@^1.4.2:
+    version "1.4.2"
+    resolved "https://registry.yarnpkg.com/react-native-responsive-screen/-/react-native-responsive-screen-1.4.2.tgz#45280826d24f9accbfdf46a36cb8e6d780f76f28"
+    integrity sha512-BLYz0UUpeohrib7jbz6wDmtBD5OmiuMRko4IT8kIF63taXPod/c5iZgmWnr5qOnK8hMuKiGMvsM3sC+eHX/lEQ==
+  
+  react-native-root-siblings@^4.0.0:
+    version "4.1.1"
+    resolved "https://registry.yarnpkg.com/react-native-root-siblings/-/react-native-root-siblings-4.1.1.tgz#b7742db7634a87f507eb99a5fd699c4f10c46ab0"
+    integrity sha512-sdmLElNs5PDWqmZmj4/aNH4anyxreaPm61c4ZkRiR8SO/GzLg6KjAbb0e17RmMdnBdD0AIQbS38h/l55YKN4ZA==
+  
+  react-native-root-toast@^3.2.1:
+    version "3.2.1"
+    resolved "https://registry.yarnpkg.com/react-native-root-toast/-/react-native-root-toast-3.2.1.tgz#f456d029f5c5b76e4b686334f25371465478a3be"
+    integrity sha512-BNf6LKMqcIAonKgqCGQWk+1lduFqSjPYbEF0FygMZbXhODRTvrGUAvAgV6kfamVPOkKHUkPU7dnnvmgEQ8ZDzQ==
+    dependencies:
+      prop-types "^15.5.10"
+      react-native-root-siblings "^4.0.0"
+  
   react-native-safe-area-context@3.2.0:
     version "3.2.0"
     resolved "https://registry.npmjs.org/react-native-safe-area-context/-/react-native-safe-area-context-3.2.0.tgz"
@@ -6687,9 +6759,16 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/react-native-timer/-/react-native-timer-1.3.6.tgz#726bae63b5cc6f51a0bd3a9227e07ef0836ff350"
     integrity sha512-/YytE7B2YrnYwqNsoQopxg3GtHwrSH/f3pP9UgpHPpJok33YkNX+sSODI6dt75/FLDKQWIYcDHLc3WkdfKKdTg==
   
+  react-native-toast-message@^1.4.9:
+    version "1.4.9"
+    resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-1.4.9.tgz#47f33ac312fe2aee5dbdd4ae14745fa0d354102e"
+    integrity sha512-QhHzzsiymKpHEWz2nUKQjQMRuGN+/a8cOwDXJcz3TQFY03p20f6sJW9JKw3KkMfvWiUhGbApCPpNU6tHaAZ32w==
+    dependencies:
+      prop-types "^15.7.2"
+  
   react-native-vector-icons@^8.1.0:
     version "8.1.0"
-    resolved "https://registry.npmjs.org/react-native-vector-icons/-/react-native-vector-icons-8.1.0.tgz"
+    resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-8.1.0.tgz#e8ee2b17bc4d9f636da1c6f67feee8e2a850c3d8"
     integrity sha512-sHIdBB6Y0dHaot2fMXgy5J/hhCn5YuyN7SKDNFgPzL8KA1oF2/v7mgYMavnK7LIIs2dJoGnDANKf61dsU+TZlg==
     dependencies:
       lodash.frompairs "^4.0.1"
