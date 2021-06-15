@@ -25,11 +25,12 @@ import 'firebase/database'
 import 'firebase/storage'
 import Achievements from "../../../assets/data/Achievements";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function ProfileScreen({navigation}) {
     const BadgedIcon = (MaterialCommunityIcons)
     const user = firebase.auth().currentUser;
+
 
     const [image, setImage] = useState(null);
     const [userAchievements, setUserAchievements] = useState([])
@@ -41,15 +42,19 @@ export default function ProfileScreen({navigation}) {
     });
 
     async function chooseFile() {
-        await DocumentPicker.getDocumentAsync({
-            type: 'image/*',
-            copyToCacheDirectory: false,
-            multiple: false
-        }).then(response => {
-            setImage(response.uri)
-            firebase.storage().ref('profile-images/' + user.uid).put(response.uri)
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
 
-        })
+        console.log(result);
+
+        if (!result.cancelled) {
+            setImage(result.uri);
+        }
+
     }
 
     useEffect(() => {
@@ -112,8 +117,7 @@ export default function ProfileScreen({navigation}) {
             />
             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                 <View>
-                    {/* {image && <Image source={{uri: image}} style={{*/}
-                    {<Image source={require('../../../assets/images/giorgio.jpg')} style={{
+                    {image && <Image source={{uri: image}} style={{
                         width: 120,
                         height: 120,
                         borderRadius: 60,
