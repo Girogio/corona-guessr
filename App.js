@@ -143,10 +143,10 @@ function MainStack() {
         <mainStack.Navigator
             appearance={{
                 floating: true,
-                tabBarBackground: Colors.lighterPrimary,
-                dotSize: 'small',
+                tabBarBackground: '#252525',
+                dotSize: 'medium',
                 activeColors: "#fff",
-                activeTabBackgrounds: 'red'
+                activeTabBackgrounds: Colors.primary
             }}
             tabStyle={{
                 backgroundColor: Colors.primary,
@@ -163,32 +163,33 @@ function MainStack() {
                               options={{
                                   tabBarLabel: "Home",
                                   tabBarIcon: ({focused}) => (
-                                      <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} color={Colors.primary}
-                                                size={20}/>
+                                      <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'}
+                                                color={focused ? 'white' : Colors.primary}
+                                                size={22}/>
                                   ),
                               }}
             />
             <mainStack.Screen name="Leaderboard"
                               component={LeaderboardStack}
                               options={{
-                                  tabBarLabel: "Home",
-                                  tabBarIcon: () => (
+                                  tabBarLabel: "Leaderboard",
+                                  tabBarIcon: ({focused}) => (
                                       <MaterialIcons
                                           name="bar-chart"
-                                          color={Colors.primary}
-                                          size={20}/>
+                                          color={focused ? 'white' : Colors.primary}
+                                          size={22}/>
                                   ),
                               }}
             />
             <mainStack.Screen name="Profile"
                               component={ProfileStack}
                               options={{
-                                  tabBarLabel: "Home",
+                                  tabBarLabel: "Profile",
                                   tabBarIcon: ({focused}) => (
-                                      <MaterialIcons
-                                          name={focused ? 'ios-person-outliner' : 'ios-person-outline'}
-                                          color={Colors.primary}
-                                          size={20}/>
+                                      <Ionicons
+                                          name={focused ? 'ios-person' : 'ios-person-outline'}
+                                          color={focused ? 'white' : Colors.primary}
+                                          size={22}/>
                                   ),
                               }}
             />
