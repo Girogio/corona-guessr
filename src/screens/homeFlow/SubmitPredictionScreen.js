@@ -45,8 +45,6 @@ export default function SubmitPredictionScreen({navigation}) {
                                       style={{paddingLeft: 35}}/>
                             </TouchableOpacity>
                         }
-                        leftContainerStyle={MyStyles.mainHeaderLeftContainer}
-                        centerContainerStyle={MyStyles.mainHeaderCenterContainer}
                         centerComponent={<Text style={MyStyles.mainHeaderText}>YOUR PREDICTION</Text>}
                         containerStyle={MyStyles.mainHeaderContainer}
                 />
