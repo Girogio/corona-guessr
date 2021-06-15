@@ -25,7 +25,7 @@ import 'firebase/database'
 import 'firebase/storage'
 import Achievements from "../../../assets/data/Achievements";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import * as ImagePicker  from 'expo-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function ProfileScreen({navigation}) {
     const BadgedIcon = (MaterialCommunityIcons)
@@ -53,8 +53,6 @@ export default function ProfileScreen({navigation}) {
         console.log(result);
 
         if (!result.cancelled) {
-            setImage(result.uri);
-// Implement a new Blob promise with XMLHTTPRequest
             const blob: Blob = await new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
@@ -67,14 +65,11 @@ export default function ProfileScreen({navigation}) {
                 xhr.open("GET", result.uri, true);
                 xhr.send(null);
             });
-
-// Create a ref in Firebase (I'm using my user's ID)
             const ref = firebase.storage().ref().child(`avatars/${user.uid}`);
 
-// Upload blob to Firebase
-            await ref.put(blob, {contentType: "image/png"});
+            const snapshot = await ref.put(blob, {contentType: "image/png"});
+             setImage(await snapshot.ref.getDownloadURL())
         }
-
     }
 
     useEffect(() => {
