@@ -5,7 +5,7 @@ import {Header} from "react-native-elements";
 import Colors from "../../../assets/colors/Colors";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import firebase from 'firebase/app'
-import Toast from "react-native-fast-toast";
+import Toast, {BaseToast} from 'react-native-toast-message';
 import 'firebase/database'
 import {
     heightPercentageToDP as hp,
@@ -46,7 +46,7 @@ const renderLeaderboardItem = ({item}) => {
                             borderRadius: 29
                         }}
                         source={require('../../../assets/images/justin.jpg')}/>
-                    <Text style={{color: 'white', marginLeft: 8}}> {item.name}</Text>
+                    <Text style={{color: 'white', marginLeft: 8, fontFamily: 'Poppins-SemiBold'}}> {item.name}</Text>
                 </View>
 
                 {/*Point indicator*/}
@@ -54,7 +54,6 @@ const renderLeaderboardItem = ({item}) => {
                     backgroundColor: '#000',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginTop: 7,
                     marginRight: 10,
                     paddingHorizontal: 12,
                     paddingVertical: 3,
@@ -69,6 +68,7 @@ const renderLeaderboardItem = ({item}) => {
     )
 }
 
+
 export default function LeaderboardScreen() {
 
     const [caseStatistics, setCaseStatistics] = useState([])
@@ -76,8 +76,6 @@ export default function LeaderboardScreen() {
     const toast = useRef(null);
 
     function onRefresh() {
-        toast.current.show("Task finished successfully");
-
         /*Update User Data*/
         firebase.database().ref('users/').once('value', snapshot => {
             const toUserData = []
@@ -100,6 +98,8 @@ export default function LeaderboardScreen() {
                 toUserDataDotGuesses = []
             })
             setUserData(toUserData)
+
+
         })
 
         /*Update Statistics*/
@@ -158,7 +158,21 @@ export default function LeaderboardScreen() {
             <StatusBar style="light"/>
             <Header backgroundColor={Colors.darkBackground}
                     rightComponent={
-                        <TouchableOpacity onPress={() => onRefresh()}>
+                        <TouchableOpacity onPress={() => {
+                            onRefresh()
+                            toast.current.show({
+                                type: 'success',
+                                text1: 'Refresh successful!',
+                                text2: 'Leaderboard is now up to date!',
+                                position: 'bottom',
+                                visibilityTime: 3000,
+                                bottomOffset: 10,
+                                props: {
+                                    guid: 'guid-id', onPress: () => {
+                                    }
+                                }
+                            });
+                        }}>
                             <Icon name={'reload'} style={{marginRight: wp('6%')}}
                                   size={30} color={'white'}/>
                         </TouchableOpacity>
@@ -177,7 +191,6 @@ export default function LeaderboardScreen() {
                 keyExtractor={item => item.uid}
             />
             <Toast ref={toast}/>
-
         </View>
     )
 }

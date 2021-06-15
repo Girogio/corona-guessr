@@ -46,7 +46,7 @@ export default function DashboardScreen({navigation}) {
 
         let predictionUpdate = setInterval(() => {
             setRemainingTime().then(() => {
-                firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value').then(snapshot => {
+                firebase.database().ref('users/' + firebase.auth().currentUser?.uid).once('value').then(snapshot => {
                     userData.hasGuessed = snapshot.child(path + '/hasGuessed').val() !== null;
                 })
             }, 1000)
@@ -54,7 +54,7 @@ export default function DashboardScreen({navigation}) {
         const path = '/guesses/' + (now.getDate() + 1 < 10 ? '0' + now.getDate() + 1 : (now.getDate() + 1)) + '-' + ((now.getMonth() + 1) < 10 ? '0' + (now.getMonth() + 1) : (now.getMonth() + 1)) + '-' + now.getFullYear()
 
         firebase.database()
-            .ref('users/' + firebase.auth().currentUser.uid)
+            .ref('users/' + firebase.auth().currentUser?.uid)
             .on('value', snapshot => {
                 const userStuff = {
                     date_created: snapshot.val().date_created,
@@ -109,19 +109,20 @@ export default function DashboardScreen({navigation}) {
             <View style={{marginTop: 50, flexDirection: 'row'}}>
                 {/*Button 1*/}
                 <TouchableNativeFeedback
-                    onPress={() => userData.hasGuessed ? null : navigation.navigate('SubmitPrediction')}>
+                    disabled={userData.hasGuessed}
+                    onPress={userData.hasGuessed ? null : () => navigation.navigate('SubmitPrediction')}>
                     <View style={styles.leftButtonContainer}>
                         <Text style={styles.buttonTitleText}>Your{'\n'}Prediction</Text>
                         <View style={styles.buttonStatusContainer}>
                             <MaterialCommIcon color='white' size={22}
                                               name={userData.hasGuessed ? 'clock-check' : 'clock-time-four'}/>
                             <Text
-                                style={styles.buttonStatusText}>{
-                                !userData.hasGuessed ?
-                                    'Take a guess!'
-                                    : (remaining.hours < 10 ? '0' + remaining.hours : remaining.hours)
-                                    + ':' + (remaining.minutes < 10 ? '0' + remaining.minutes : remaining.minutes)
-                                    + ':' + (remaining.seconds < 10 ? '0' + remaining.seconds : remaining.seconds)}</Text>
+                                style={styles.buttonStatusText}>{!userData.hasGuessed ?
+                                'Take a guess!' : (remaining.hours < 10 ? '0' + remaining.hours : remaining.hours)
+                                + ':' + (remaining.minutes < 10 ? '0' + remaining.minutes : remaining.minutes)
+                                + ':' + (remaining.seconds < 10 ? '0' + remaining.seconds : remaining.seconds)
+
+                            }</Text>
                         </View>
                         <View style={styles.divider}/>
                         <Text
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'white',
-        fontFamily: 'ProximaNova-Bold',
+        fontFamily: 'Poppins-SemiBold',
         fontSize: 21,
     },
     subtitle: {

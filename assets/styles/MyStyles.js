@@ -24,7 +24,7 @@ const MyStyles = StyleSheet.create({
         height: 48,
         width: 310,
         borderWidth: 2,
-        fontFamily: 'ProximaNova-Regular',
+        fontFamily: 'Poppins-SemiBold',
         color: '#ffffff',
         marginTop: 25,
         paddingRight: 10,
@@ -40,7 +40,7 @@ const MyStyles = StyleSheet.create({
     mainHeaderText: {
         color: 'white',
         textAlign: 'center',
-        fontFamily: 'ProximaNova-Bold',
+        fontFamily: 'Poppins-SemiBold',
         fontSize: 21,
     },
 

@@ -16,7 +16,7 @@ export default function OnBoardingScreen({navigation}) {
         try {
             await AsyncStorage.setItem('@first_timer', 'false');
         } catch (error) {
-
+            console.log(error)
         }
         navigation.navigate('MainStack')
     };
@@ -26,9 +26,8 @@ export default function OnBoardingScreen({navigation}) {
             <StatusBar style="light"/>
             <Onboarding
                 onDone={() => {
-                    storeData().then(() => console.log('done'))
+                    storeData().then()
                 }}
-                skipLabel={false}
                 pages={
                     [
                         {
@@ -63,7 +62,7 @@ export default function OnBoardingScreen({navigation}) {
                                         </View>
                                         <View style={styles.buttonStatusContainer}>
                                             <Icon color='white' size={22} name={'people-outline'}/>
-                                            <Text style={styles.buttonStatusText}></Text>
+                                           {/*<Text style={styles.buttonStatusText}></Text>*/}
                                         </View>
                                         <View style={styles.divider}/>
                                         <Text style={styles.buttonStatusText}>See what others{'\n'}predicted .</Text>
@@ -88,7 +87,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'white',
-        fontFamily: 'ProximaNova-Bold',
+        fontFamily: 'Poppins-SemiBold',
         fontSize: 21,
     },
     subtitle: {
