@@ -117,12 +117,12 @@ export default function DashboardScreen({navigation}) {
                             <MaterialCommIcon color='white' size={22}
                                               name={userData.hasGuessed ? 'clock-check' : 'clock-time-four'}/>
                             <Text
-                                style={styles.buttonStatusText}>{
-                                !userData.hasGuessed ?
-                                    'Take a guess!'
-                                    : (remaining.hours < 10 ? '0' + remaining.hours : remaining.hours)
-                                    + ':' + (remaining.minutes < 10 ? '0' + remaining.minutes : remaining.minutes)
-                                    + ':' + (remaining.seconds < 10 ? '0' + remaining.seconds : remaining.seconds)}</Text>
+                                style={styles.buttonStatusText}>{!userData.hasGuessed ?
+                                'Take a guess!' : (remaining.hours < 10 ? '0' + remaining.hours : remaining.hours)
+                                + ':' + (remaining.minutes < 10 ? '0' + remaining.minutes : remaining.minutes)
+                                + ':' + (remaining.seconds < 10 ? '0' + remaining.seconds : remaining.seconds)
+
+                            }</Text>
                         </View>
                         <View style={styles.divider}/>
                         <Text
