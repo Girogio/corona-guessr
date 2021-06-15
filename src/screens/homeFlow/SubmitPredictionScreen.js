@@ -25,9 +25,11 @@ export default function SubmitPredictionScreen({navigation}) {
 
     function submitGuess() {
         const now = new Date();
-        const path = 'users/' + user.uid + '/guesses/' + (now.getDate() + 1 < 10 ? '0' + now.getDate() + 1 : (now.getDate() + 1)) + '-' + ((now.getMonth() + 1) < 10 ? '0' + (now.getMonth() + 1) : (now.getMonth() + 1)) + '-' + now.getFullYear()
-        firebase.database().ref(path + '/guess').set(guess).then(() => {
-            firebase.database().ref(path + '/hasGuessed').set(true).then(() => {
+        const tomorrow = 'users/' + user.uid + '/guesses/' + (now.getDate() + 1 < 10 ? '0' + now.getDate() + 1 : (now.getDate() + 1)) + '-' + ((now.getMonth() + 1) < 10 ? '0' + (now.getMonth() + 1) : (now.getMonth() + 1)) + '-' + now.getFullYear()
+        const today = 'users/' + user.uid + '/guesses/' + (now.getDate() < 10 ? '0' + now.getDate() : (now.getDate())) + '-' + ((now.getMonth() + 1) < 10 ? '0' + (now.getMonth() + 1) : (now.getMonth() + 1)) + '-' + now.getFullYear()
+        firebase.database().ref(tomorrow + '/guess').set(guess).then(() => {
+            firebase.database().ref(tomorrow + '/hasGuessed').set(true).then(() => {
+                firebase.database().ref(today + '/hasGuessed').remove().then()
                 navigation.pop(1);
             })
         })
