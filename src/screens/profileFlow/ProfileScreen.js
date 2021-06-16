@@ -68,7 +68,8 @@ export default function ProfileScreen({navigation}) {
             const ref = firebase.storage().ref().child(`avatars/${user.uid}`);
 
             const snapshot = await ref.put(blob, {contentType: "image/png"});
-             setImage(await snapshot.ref.getDownloadURL())
+            firebase.database().ref('users/' + user.uid + '/image').set(await snapshot.ref.getDownloadURL()).then()
+            setImage(await snapshot.ref.getDownloadURL())
         }
     }
 
@@ -84,6 +85,7 @@ export default function ProfileScreen({navigation}) {
                     achievements: snapshot.val().achievements
                 }
                 setUserData(userStuff)
+                setImage(snapshot.child('image').val())
             })
         firebase.database()
             .ref('users/' + user.uid + '/achievements')
