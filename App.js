@@ -147,7 +147,7 @@ function MainStack() {
             }}
         >
             <mainStack.Screen name="Home"
-                              component={DashboardScreen}
+                              component={HomeStack}
                               options={{
                                   tabBarLabel: "Home",
                                   tabBarIcon: ({focused}) => (
