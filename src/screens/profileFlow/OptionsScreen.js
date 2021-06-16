@@ -15,7 +15,7 @@ import "firebase/auth"
 
 
 function logOut() {
-   firebase.auth().signOut().then();
+    firebase.auth().signOut().then();
 }
 
 export default function OptionsScreen({navigation}) {
@@ -35,6 +35,7 @@ export default function OptionsScreen({navigation}) {
                         date_created: snapshot.val().date_created,
                         displayName: snapshot.val().displayName,
                         email: snapshot.val().email,
+                        image: snapshot.child('image').val(),
                         rank: snapshot.val().rank,
                         achievements: snapshot.val().achievements
                     }
@@ -61,7 +62,7 @@ export default function OptionsScreen({navigation}) {
                 {/*Profile stuff*/}
                 <View style={{flexDirection: 'row', marginTop: 19, alignItems: 'center'}}>
                     <Image style={{borderRadius: 110, height: 55, width: 55}}
-                           source={require('../../../assets/images/robert.jpg')}/>
+                           source={{uri: userData.image}}/>
                     <Text style={{fontFamily: 'Poppins-SemiBold', fontSize: 18, marginLeft: 16, color: 'white'}}>
                         {userData.displayName}
                     </Text>
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
         paddingRight: 20,
         borderRadius: 18,
         width: '90%',
-        height: '83%'
+        height: '75%'
     },
     entryTitle: {
         fontFamily: 'Poppins-SemiBold',

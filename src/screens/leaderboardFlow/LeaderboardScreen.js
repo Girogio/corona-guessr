@@ -5,7 +5,7 @@ import {Header} from "react-native-elements";
 import Colors from "../../../assets/colors/Colors";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import firebase from 'firebase/app'
-    import Toast from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 import 'firebase/database'
 import {
     heightPercentageToDP as hp,
@@ -45,7 +45,7 @@ const renderLeaderboardItem = ({item}) => {
                             height: 58,
                             borderRadius: 29
                         }}
-                        source={require('../../../assets/images/justin.jpg')}/>
+                        source={{uri: item.image}}/>
                     <Text style={{color: 'white', marginLeft: 8, fontFamily: 'Poppins-SemiBold'}}> {item.name}</Text>
                 </View>
 
@@ -92,6 +92,7 @@ export default function LeaderboardScreen() {
                     name: user.val().displayName,
                     points: user.child('/score/points').val(),
                     guesses: toUserDataDotGuesses,
+                    image: user.child('image').val(),
                     position: user.child('/score/position').val(),
                 })
 
